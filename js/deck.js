@@ -287,16 +287,32 @@ Deck.Cards = [
 
 Deck.Shuffle = function () {
 
+	function shuffle(o){ //v1.0
+	    for(var j, x, i = o.length; i; j = Math.floor(Math.random() * i), x = o[--i], o[i] = o[j], o[j] = x);
+	    return o;
+	};
 
+	Deck.Shuffled = shuffle(Deck.Cards);
 }
 
 
-Deck.Deal = function () {
+Deck.Deal = function (numPlayers) {
+	var userCards = [];
+	var numCards = Math.floor(52/numPlayers);
+	// var numCards = (numPlayers / 52)*numPlayers;
+	console.log(numCards);
+	for (var i = 0; i < numPlayers; i++) {
+		userCards[i] = Deck.Shuffled.splice(0, numCards);
+		console.dir(userCards[i]);
+	}
 
+	return userCards;
 }
+
 
 // Deck.Compare = function () {
 	
 // }
 
-var Deck.Shuffled = [];
+Deck.Shuffled = [];
+
