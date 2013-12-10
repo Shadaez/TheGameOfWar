@@ -1,7 +1,8 @@
+var Games = {};
 
-All=[];
+Games.All=[];
 
-Add = function(gameID, player1Id){
+Games.Add = function(gameID, player1Id){
 	var game={};
 	game.id=gameID;
 	game.Players=[];
@@ -10,5 +11,4 @@ Add = function(gameID, player1Id){
 	Games.All.push(game);
 }
 
-exports.Add = Add;
-exports.All = All;
+module.exports = Games;

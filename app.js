@@ -2,7 +2,7 @@ var path = require("path"),
     _ = require("underscore"),
     express = require("express"),
     socketio = require("socket.io"),
-    http=require("http");
+    http=require("http"),
     Deck=require("./js/deck.js"),
     Games=require("./js/game.js");
 
