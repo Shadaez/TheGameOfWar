@@ -10,16 +10,18 @@
     </head>
 
     <body>
-        <form id="GameFrm">
-            <label for="playerName">Player Name</label>
-            <input type="text" name="playerName" value="" placeholder= "Enter Player Name">
-            <br/>
-            <input type="button" id="create" value="Create Game">
-            <ul id="gameList">
-                <li></li>
-            </ul>
-            <input type="button" id="join" value="Join Game">
-        </form>
+        <div id='main'>
+            <form id="GameFrm">
+                <label for="playerName">Player Name</label>
+                <input type="text" name="playerName" value="" placeholder= "Enter Player Name">
+                <br/>
+                <input type="button" id="create" value="Create Game">
+                <ul id="gameList">
+                    <li></li>
+                </ul>
+                <input type="button" id="join" value="Join Game">
+            </form>
+        </div>
 
         <script>
             var serverSocket = io.connect("http://localhost");
@@ -35,7 +37,13 @@
 
 
 
-            serverSocket.on("", function() {
+            serverSocket.on("updateGameList", function(gameList) {
+                
+                $('#gameList').html('');
+                var gameListLength = gameList.length;
+                for(var i = 0; i < gameListLength; i++) {
+                    $('#gameList').append('<li>' + gameList[i].id + '</li>');
+                }
                 
             });
         </script>

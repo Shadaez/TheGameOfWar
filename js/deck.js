@@ -1,6 +1,5 @@
-var Deck = {};
 
-Deck.Cards = [
+Cards = function () { return [
 
 	/* ------ club ------ */
 	{
@@ -282,10 +281,10 @@ Deck.Cards = [
 
 
 
-];
+]}
 
 
-Deck.Shuffle = function () {
+Shuffle = function () {
 
 	var shuffledDeck = [];
 
@@ -294,13 +293,13 @@ Deck.Shuffle = function () {
 	    return o;
 	};
 
-	shuffledDeck = shuffle(Deck.Cards);
+	shuffledDeck = shuffle(new Deck.Cards);
 
 	return shuffledDeck;
 }
 
 
-Deck.Deal = function (numPlayers) {
+Deal = function (numPlayers) {
 	var userCards = [];
 	var shuffledDeck = Deck.Shuffle();
 
@@ -316,7 +315,14 @@ Deck.Deal = function (numPlayers) {
 }
 
 
+exports.Cards = Cards;
+exports.Shuffle = Shuffle;
+exports.Deal = Deal;
+
 // Deck.Compare = function () {
 	
 // }
+
+
+
 
