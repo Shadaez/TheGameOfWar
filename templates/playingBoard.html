@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>The Game of War</title>
+        <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+        <script src="//cdnjs.cloudflare.com/ajax/libs/underscore.js/1.5.2/underscore-min.js"></script>
+
+        <!-- socket.io library -->
+        <script src="/socket.io/socket.io.js"></script>
+    </head>
+
+    <body>
+        <form id="GameFrm">
+            <label for="playerName">Player Name</label>
+            <input type="text" name="playerName" value="" placeholder= "Enter Player Name">
+            <br/>
+            <input type="button" id="create" value="Create Game">
+            <ul id="gameList">
+                <li></li>
+            </ul>
+            <input type="button" id="join" value="Join Game">
+        </form>
+
+        <script>
+            var serverSocket = io.connect("http://localhost");
+           
+            $("#create").on("click", function() {
+                var player=$("[name='playerName']").val();
+                serverSocket.emit("create", {playerName:player});
+
+                // update the URL without posting
+               // history.pushState({name: fileName}, fileName, fileName);
+
+            });
+
+
+
+            serverSocket.on("", function() {
+                
+            });
+        </script>
+    </body>
+</html>
