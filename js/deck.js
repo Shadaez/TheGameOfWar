@@ -1,5 +1,6 @@
+var Deck = {};
 
-Cards = function () { return [
+Deck.Cards = function () { return [
 
 	/* ------ club ------ */
 	{
@@ -284,7 +285,7 @@ Cards = function () { return [
 ]}
 
 
-Shuffle = function () {
+Deck.Shuffle = function () {
 
 	var shuffledDeck = [];
 
@@ -299,7 +300,7 @@ Shuffle = function () {
 }
 
 
-Deal = function (numPlayers) {
+Deck.Deal = function (numPlayers) {
 	var userCards = [];
 	var shuffledDeck = Deck.Shuffle();
 
@@ -314,10 +315,37 @@ Deal = function (numPlayers) {
 	return userCards;
 }
 
+Deck.Compare = function () {
+	//expects any number of arguments in the following format
+	// {playername: 'Name',
+	// 	card: {
+	// 		value:5,
+	// 		name:"2",
+	// 		suit:"spade",
+	// 	}};
+	var maxCard = _.max(arguments, function (submission) {
+		var suitValue;
+		switch (submission.card.suit) {
+			case "spade":
+				suitValue = .1;
+				break;
+			case "club":
+				suitValue = .2;
+				break;
+			case "heart":
+				suitValue = .3;
+				break;
+			case "diamond":
+				suitValue = .4;
+				break;
+		}
+		return (submission.card.value + suitValue);
+	});
 
-exports.Cards = Cards;
-exports.Shuffle = Shuffle;
-exports.Deal = Deal;
+}
+
+module.exports = Deck;
+
 
 // Deck.Compare = function () {
 	

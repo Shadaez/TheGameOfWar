@@ -16,6 +16,10 @@ expressApp.get("/", function(req, res) {
      res.redirect("playingBoard.html");
 });
 
+expressApp.get("/game/:gameid", function(req, res) {
+     var gameid = req.param("gameid");
+});
+
 // expressApp.get("/:filename", function(req, res) {
 //     var filename = req.param("filename");
 
