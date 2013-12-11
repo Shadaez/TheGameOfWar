@@ -20,6 +20,7 @@
                 <select id="gameList" name="games" size="5">
                 </select>
                 <input type="button" id="join" value="Join Game">
+                <input type="button" id="start" value="Start">
             </form>
         </div>
 
@@ -42,9 +43,14 @@
                //clearing the html and changing it to be the game board
 
             });
+            $('#start').on('click', function () {
+                serverSocket.emit("deal");
+            });
+
             $("#join").on("click", function(){
                 var player = getPlayerName();
                 var gameID = $('#gameList').val();
+                console.log(gameID);
                 if (player.length <= 0){
                     alert("please insert a name");
                 } else if(!gameID){
@@ -77,6 +83,10 @@
                 } else {
                     alert("failed to join game, please try again");
                 }
+            });
+
+            serverSocket.on("cardDecks", function(data){
+                console.dir(data)
             });
         </script>
     </body>

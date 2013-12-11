@@ -306,10 +306,8 @@ Deck.Deal = function (numPlayers) {
 
 	var numCards = Math.floor(52/numPlayers);
 	// var numCards = (numPlayers / 52)*numPlayers;
-	console.log(numCards);
 	for (var i = 0; i < numPlayers; i++) {
 		userCards[i] = shuffledDeck.splice(0, numCards);
-		console.dir(userCards[i]);
 	}
 
 	return userCards;
