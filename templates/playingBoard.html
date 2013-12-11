@@ -20,7 +20,7 @@
                 <select id="gameList" name="games" size="5">
                 </select>
                 <input type="button" id="join" value="Join Game">
-                <input type="button" id="start" value="Start">
+                <input type="button" id="start_button" value="Start">
             </form>
         </div>
         <div id='board'>
@@ -28,7 +28,7 @@
                 <label for="Game">Game ID</label>
                 <input type="text" name="txtGame" value="" readonly>
                 <br/>
-                <input type="button" id="start" value="Start Game">
+                <input type="button" id="deal" value="Deal Game">
                 <select id="playerList" name="players" size="5">
                 </select>
             </form>
@@ -55,7 +55,8 @@
                //clearing the html and changing it to be the game board
 
             });
-            $('#start').on('click', function () {
+            $('#deal').on('click', function () {
+                var gameID = $("#deal").data("gameID")
                 serverSocket.emit("deal");
             });
 
@@ -88,7 +89,9 @@
             });
             serverSocket.on("join", function(data){
                 if(data.success){
-                    //update view?
+                    //update view? YES!!
+                    // history.pushState({name: fileName}, fileName, fileName);
+                    $('#deal').data('gameID', data.gameID);
                 } else {
                     alert("failed to join game, please try again");
                 }
