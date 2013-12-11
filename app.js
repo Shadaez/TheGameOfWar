@@ -16,6 +16,10 @@ expressApp.get("/", function(req, res) {
      res.redirect("playingBoard.html");
 });
 
+expressApp.get("/game/:gameid", function(req, res) {
+     var gameid = req.param("gameid");
+});
+
 // expressApp.get("/:filename", function(req, res) {
 //     var filename = req.param("filename");
 
@@ -31,14 +35,15 @@ expressApp.get("/", function(req, res) {
 var httpServer = http.createServer(expressApp)
     ioServer = socketio.listen(httpServer);
 
-
 var gameCounter = 0;
 
 // Listen for socket.io events
 ioServer.on("connection", function(clientSocket) {
+    //so the player gets the games on connect:
+    clientSocket.emit("updateGameList", Games.All);
+
     clientSocket.on("create", function(data) {
     	gameCounter ++;
-    	console.log(data);
         Games.Add(gameCounter, data.playerName);
         clientSocket.broadcast.emit("updateGameList", Games.All);
     });
@@ -47,10 +52,20 @@ ioServer.on("connection", function(clientSocket) {
         Games.Start(data.gameID);
         clientSocket.broadcast.emit("sendUserStack", Games.All[data.gameID]);
     });
+    
+    clientSocket.on("join", function(data) {
+        var joined = Games.Join(data.gameID, data.playerName)
+        clientSocket.emit("join", {
+            success: joined
+        });
+        if (joined){
+            clientSocket.broadcast.emit("updateGameList", Games.All);
+        } else {
+            clientSocket.emit("updateGameList", Games.All);
+            //if they failed, their game list needs refreshing
+        }
+    });
 });
-
-
-
 
 httpServer.listen(3000);
 console.log("Started The Game of War on port 3000");
