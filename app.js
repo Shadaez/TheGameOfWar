@@ -38,7 +38,7 @@ var httpServer = http.createServer(expressApp)
 var gameCounter = 0;
 
 // Listen for socket.io events
-ioServer.on("connection", function(clientSocket) {
+ioServer.sockets.on("connection", function(clientSocket) {
     //so the player gets the games on connect:
     clientSocket.emit("updateGameList", Games.All);
 
@@ -55,15 +55,15 @@ ioServer.on("connection", function(clientSocket) {
     });
     
     clientSocket.on('deal', function(data){
-
-        var game = _.findWhere(Games.All, {gameid: data.gameID});
+        console.log(data);
+        // var game = _.findWhere(Games.All, {id: data});
+        var game = Games.Find(data);
         var players = game.Players;
         var numplayers = game.Players.length;
         var deck = Deck.Deal(numplayers);
-        console.log("numplayers - " + numplayers);
-        clientSocket.emit("cardDecks", ioServer);
+      
         for (var i = 0; i < numplayers; i ++) {
-            players[i].emit('cardDecks', deck[i]);
+            ioServer.sockets.socket(players[i]).emit("cardDecks", deck[i]);
         }
 
     });
