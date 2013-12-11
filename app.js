@@ -56,11 +56,11 @@ ioServer.on("connection", function(clientSocket) {
     
     clientSocket.on('deal', function(data){
 
-        var game = _.findWhere(Games.All, {gameid: gameid});
-        var players = game.players;
-        var numplayers = game.players.length;
+        var game = _.findWhere(Games.All, {gameid: data.gameID});
+        var players = game.Players;
+        var numplayers = game.Players.length;
         var deck = Deck.Deal(numplayers);
-
+        console.log("numplayers - " + numplayers);
         for (var i = 0; i < numplayers; i ++) {
             players[i].emit('cardDecks', deck[i]);
         }
@@ -68,7 +68,7 @@ ioServer.on("connection", function(clientSocket) {
     });
 
     clientSocket.on("join", function(data) {
-        var joined = Games.Join(data.gameID, data.playerName);
+        var joined = Games.Join(data.gameID, clientSocket.id);
         console.log(joined);
         clientSocket.emit("join", {
             success: joined,

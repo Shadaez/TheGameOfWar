@@ -56,8 +56,8 @@
 
             });
             $('#deal').on('click', function () {
-                var gameID = $("#deal").data("gameID")
-                serverSocket.emit("deal");
+                var gameID = $("#deal").data("gameID");
+                serverSocket.emit("deal", gameID);
             });
 
             $("#join").on("click", function(){
@@ -98,7 +98,7 @@
             });
 
             serverSocket.on("cardDecks", function(data){
-                console.dir(data)
+                console.dir(data);
             });
         </script>
     </body>
