@@ -98,6 +98,10 @@
             });
 
             serverSocket.on("cardDecks", function(data){
+                $('body').html('');
+                for(var i = 0; i < 3; i++) {
+                 $('body').append('<div data-value' + data[i].value + ' class="card">' + data[i].name + data[i].suit + '</div>');
+                }
                 console.dir(data);
             });
         </script>
