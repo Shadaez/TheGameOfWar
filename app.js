@@ -45,8 +45,6 @@ ioServer.on("connection", function(clientSocket) {
     clientSocket.on("create", function(data) {
     	gameCounter ++;
         Games.Add(gameCounter, clientSocket.id);// we need to store client socket id's to push to correct players
-        console.log('---- clientSocket --------');
-        console.log(clientSocket.id);
         clientSocket.broadcast.emit("updateGameList", Games.All);
         clientSocket.emit("updateGameList", Games.All);
     });
@@ -57,9 +55,7 @@ ioServer.on("connection", function(clientSocket) {
     });
     
     clientSocket.on('deal', function(data){
-        // var numplayers = 4; // for testing
-        // var numplayers = Games.Find(data.gameid).Players.length;
-        
+
         var game = _.findWhere(Games.All, {gameid: gameid});
         var players = game.players;
         var numplayers = game.players.length;
@@ -75,7 +71,8 @@ ioServer.on("connection", function(clientSocket) {
         var joined = Games.Join(data.gameID, data.playerName);
         console.log(joined);
         clientSocket.emit("join", {
-            success: joined
+            success: joined,
+            gameID: data.gameID // so that start button knows which game to join
         });
         if (joined){
             clientSocket.broadcast.emit("updateGameList", Games.All);
