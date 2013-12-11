@@ -38,8 +38,12 @@ var gameCounter = 0;
 ioServer.on("connection", function(clientSocket) {
     clientSocket.on("create", function(data) {
     	gameCounter ++;
-    	console.log(data);
         Games.Add(gameCounter, data.playerName);
+        clientSocket.broadcast.emit("updateGameList", Games.All);
+    });
+    
+    clientSocket.on("join", function(data) {
+        Games.Add(data.gameID, data.playerName)
         clientSocket.broadcast.emit("updateGameList", Games.All);
     });
 });
