@@ -61,6 +61,7 @@ ioServer.on("connection", function(clientSocket) {
         var numplayers = game.Players.length;
         var deck = Deck.Deal(numplayers);
         console.log("numplayers - " + numplayers);
+        clientSocket.emit("cardDecks", ioServer);
         for (var i = 0; i < numplayers; i ++) {
             players[i].emit('cardDecks', deck[i]);
         }
