@@ -9,6 +9,7 @@ var path = require("path"),
 // ExpressJS Server Definition
 var expressApp = express();
 expressApp.use(express.static(path.join(__dirname, 'templates')));
+expressApp.use(express.static(path.join(__dirname, 'css')));
 // expressApp.set("views", path.join(__dirname, "templates"))
    // .set("view engine", "hbs");
 

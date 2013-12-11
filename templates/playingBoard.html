@@ -7,6 +7,8 @@
 
         <!-- socket.io library -->
         <script src="/socket.io/socket.io.js"></script>
+
+        <link rel='stylesheet' type='text/css' href='main.css'>
     </head>
 
     <body>
@@ -35,7 +37,8 @@
         </div>
         <script>
             var serverSocket = io.connect("http://localhost");
-           
+            var UserCards;
+
             $("#start").on("click", function() {
                 var gameId=$("[name='txtGame']").val();
                 serverSocket.emit("create", {gameId:gameId});
@@ -97,13 +100,34 @@
                 }
             });
 
-            serverSocket.on("cardDecks", function(data){
+            serverSocket.on("cardDecks", function(cards){
+                UserCards = cards;
                 $('body').html('');
-                for(var i = 0; i < 3; i++) {
-                 $('body').append('<div data-value' + data[i].value + ' class="card">' + data[i].name + data[i].suit + '</div>');
-                }
-                console.dir(data);
+                $('body').append('<div id="game_board"></div>');
+                
+                display3Cards();
+
+                $('body').append('<div id="submit_card">Submit Card!</div>');
+                $('#game_board').on('click', '.card', function () {
+                    $('.active-card').removeClass('active-card');
+                    $(this).addClass('active-card');
+                });
+
+                $('#submit_card').on('click', function () {
+                    var selection = $('.active-card').data('value');
+                    console.dir(UserCards);
+                    var cardSlice = UserCards.splice(selection, 1);
+                    console.dir(cardSlice);
+                    console.dir(UserCards);
+                });
+                
             });
+
+            function display3Cards () {
+                for(var i = 0; i < 3; i++) {
+                 $('#game_board').append('<div data-value' + i + ' class="card">' + UserCards[i].name + UserCards[i].suit + '</div>');
+                }
+            }
         </script>
     </body>
 </html>
