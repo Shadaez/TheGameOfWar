@@ -18,19 +18,19 @@ Games.Add = function(gameID, player1Id){
 
 //finds gameID, returns reference to game object
 Games.Find = function(gameID) {
-	var x=_.findWhere(Games.All, {id: gameID});
-	console.log(x);
-	return x;
+	return _.findWhere(Games.All, {id: parseInt(gameID)});
 }
 
 Games.Join = function(gameID, playerID){
 	//if game is full, return false, else v
-	console.log(gameID,playerID);
-	game = Games.Find(gameID);
-	console.log(game);
-	game.Players.push(playerID);
-	//todo: check if it's full, update openToJoin
-	return true
+	var game = Games.Find(gameID);
+	if(game.Players.length < Games.Max){
+		game.Players.push(playerID);
+		return true;
+	} else {
+		return false;
+	}
+	
 }
 
 Games.Start = function(gameID){

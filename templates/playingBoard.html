@@ -81,8 +81,8 @@
                 //to do: check if game is OpenToJoin, grey out if it isn't
             });
             serverSocket.on("join", function(data){
-                if(data.joined){
-                    //update view
+                if(data.success){
+                    //update view?
                 } else {
                     alert("failed to join game, please try again");
                 }

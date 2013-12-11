@@ -54,7 +54,8 @@ ioServer.on("connection", function(clientSocket) {
     });
     
     clientSocket.on("join", function(data) {
-        var joined = Games.Join(data.gameID, data.playerName)
+        var joined = Games.Join(data.gameID, data.playerName);
+        console.log(joined);
         clientSocket.emit("join", {
             success: joined
         });
