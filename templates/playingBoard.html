@@ -23,14 +23,26 @@
                 <input type="button" id="start" value="Start">
             </form>
         </div>
-
+        <div id='board'>
+            <form id="GameStart">
+                <label for="Game">Game ID</label>
+                <input type="text" name="txtGame" value="" readonly>
+                <br/>
+                <input type="button" id="start" value="Start Game">
+                <select id="playerList" name="players" size="5">
+                </select>
+            </form>
+        </div>
         <script>
             var serverSocket = io.connect("http://localhost");
-            function getPlayerName(){
-                return $("[name='playerName']").val();
-            };
+           
+            $("#start").on("click", function() {
+                var gameId=$("[name='txtGame']").val();
+                serverSocket.emit("create", {gameId:gameId});
+            });
+            
             $("#create").on("click", function() {
-                var player = getPlayerName();
+                var player = $("[name='playerName']").val();
                 if (player.length <= 0){
                     alert("please insert a name")
                 } else {
@@ -48,7 +60,7 @@
             });
 
             $("#join").on("click", function(){
-                var player = getPlayerName();
+                var player = $("[name='playerName']").val();
                 var gameID = $('#gameList').val();
                 console.log(gameID);
                 if (player.length <= 0){
@@ -60,10 +72,7 @@
                         playerName: player,
                         gameID: gameID});
                 }
-            })
-
-
-
+            });
             serverSocket.on("updateGameList", function(gameList) {
                 
                 $('#gameList').html('');
@@ -78,8 +87,8 @@
                 //to do: check if game is OpenToJoin, grey out if it isn't
             });
             serverSocket.on("join", function(data){
-                if(data.joined){
-                    //update view
+                if(data.success){
+                    //update view?
                 } else {
                     alert("failed to join game, please try again");
                 }

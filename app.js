@@ -35,7 +35,6 @@ expressApp.get("/game/:gameid", function(req, res) {
 var httpServer = http.createServer(expressApp)
     ioServer = socketio.listen(httpServer);
 
-
 var gameCounter = 0;
 
 // Listen for socket.io events
@@ -50,6 +49,11 @@ ioServer.on("connection", function(clientSocket) {
         console.log(clientSocket.id);
         clientSocket.broadcast.emit("updateGameList", Games.All);
         clientSocket.emit("updateGameList", Games.All);
+    });
+    clientSocket.on("start", function(data) {
+        console.log(data);
+        Games.Start(data.gameID);
+        clientSocket.broadcast.emit("sendUserStack", Games.All[data.gameID]);
     });
     
     clientSocket.on('deal', function(data){
@@ -68,7 +72,8 @@ ioServer.on("connection", function(clientSocket) {
     });
 
     clientSocket.on("join", function(data) {
-        var joined = Games.Add(data.gameID, data.playerName)
+        var joined = Games.Join(data.gameID, data.playerName);
+        console.log(joined);
         clientSocket.emit("join", {
             success: joined
         });
@@ -80,9 +85,6 @@ ioServer.on("connection", function(clientSocket) {
         }
     });
 });
-
-
-
 
 httpServer.listen(3000);
 console.log("Started The Game of War on port 3000");

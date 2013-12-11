@@ -1,6 +1,9 @@
+var  _ = require("underscore");
+
 var Games = {};
 
 Games.All=[];
+Games.Max=6;
 
 Games.Add = function(gameID, player1Id){
 	var game={};
@@ -15,15 +18,23 @@ Games.Add = function(gameID, player1Id){
 
 //finds gameID, returns reference to game object
 Games.Find = function(gameID) {
-	return _.findWhere(Games.All, {id: gameID});
+	return _.findWhere(Games.All, {id: parseInt(gameID)});
 }
 
 Games.Join = function(gameID, playerID){
 	//if game is full, return false, else v
-	game = Games.Find(gameID);
-	game.Players.push(playerID);
-	//todo: check if it's full, update openToJoin
-	return true
+	var game = Games.Find(gameID);
+	if(game.Players.length < Games.Max){
+		game.Players.push(playerID);
+		return true;
+	} else {
+		return false;
+	}
+	
+}
+
+Games.Start = function(gameID){
+	Games.All[gameID].openToJoin=false;
 }
 
 module.exports = Games;
