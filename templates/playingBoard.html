@@ -22,13 +22,23 @@
                 <input type="button" id="join" value="Join Game">
             </form>
         </div>
-
+        <div id='board'>
+            <form id="GameStart">
+                <label for="Game">Game ID</label>
+                <input type="text" name="txtGame" value="" readonly>
+                <br/>
+                <input type="button" id="start" value="Start Game">
+                <ul id="playerList">
+                    <li></li>
+                </ul>
+            </form>
+        </div>
         <script>
             var serverSocket = io.connect("http://localhost");
            
-            $("#create").on("click", function() {
-                var player=$("[name='playerName']").val();
-                serverSocket.emit("create", {playerName:player});
+            $("#start").on("click", function() {
+                var gameId=$("[name='txtGame']").val();
+                serverSocket.emit("create", {gameId:gameId});
 
                 // update the URL without posting
                // history.pushState({name: fileName}, fileName, fileName);

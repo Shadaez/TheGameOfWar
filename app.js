@@ -42,6 +42,11 @@ ioServer.on("connection", function(clientSocket) {
         Games.Add(gameCounter, data.playerName);
         clientSocket.broadcast.emit("updateGameList", Games.All);
     });
+    clientSocket.on("start", function(data) {
+        console.log(data);
+        Games.Start(data.gameID);
+        clientSocket.broadcast.emit("sendUserStack", Games.All[data.gameID]);
+    });
 });
 
 
