@@ -9,6 +9,8 @@ Games.Add = function(gameID, player1Id){
 	game.Players.push(player1Id);
 	game.openToJoin=true;
 	Games.All.push(game);
+	//we need to know size of the game
+	//to check if it's ready to start / if players can join
 }
 
 //finds gameID, returns reference to game object
@@ -17,9 +19,11 @@ Games.Find = function(gameID) {
 }
 
 Games.Join = function(gameID, playerID){
+	//if game is full, return false, else v
 	game = Games.Find(gameID);
 	game.Players.push(playerID);
-	//todo: check if it's full
+	//todo: check if it's full, update openToJoin
+	return true
 }
 
 module.exports = Games;

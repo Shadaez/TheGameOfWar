@@ -36,6 +36,9 @@ var gameCounter = 0;
 
 // Listen for socket.io events
 ioServer.on("connection", function(clientSocket) {
+    //so the player gets the games on connect:
+    clientSocket.emit("updateGameList", Games.All);
+
     clientSocket.on("create", function(data) {
     	gameCounter ++;
         Games.Add(gameCounter, data.playerName);
@@ -43,8 +46,16 @@ ioServer.on("connection", function(clientSocket) {
     });
     
     clientSocket.on("join", function(data) {
-        Games.Add(data.gameID, data.playerName)
-        clientSocket.broadcast.emit("updateGameList", Games.All);
+        var joined = Games.Add(data.gameID, data.playerName)
+        clientSocket.emit("join", {
+            success: joined
+        });
+        if (joined){
+            clientSocket.broadcast.emit("updateGameList", Games.All);
+        } else {
+            clientSocket.emit("updateGameList", Games.All);
+            //if they failed, their game list needs refreshing
+        }
     });
 });
 

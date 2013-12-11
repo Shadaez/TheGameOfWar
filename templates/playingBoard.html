@@ -16,24 +16,45 @@
                 <input type="text" name="playerName" value="" placeholder= "Enter Player Name">
                 <br/>
                 <input type="button" id="create" value="Create Game">
-                <ul id="gameList">
-                    <li></li>
-                </ul>
+                <br/>
+                <select id="gameList" name="games" size="5">
+                </select>
                 <input type="button" id="join" value="Join Game">
             </form>
         </div>
 
         <script>
             var serverSocket = io.connect("http://localhost");
-           
+            function getPlayerName(){
+                return $("[name='playerName']").val();
+            };
             $("#create").on("click", function() {
-                var player=$("[name='playerName']").val();
-                serverSocket.emit("create", {playerName:player});
-
+                var player = getPlayerName();
+                if (player.length <= 0){
+                    alert("please insert a name")
+                } else {
+                    serverSocket.emit("create", {playerName:player});
+                }
                 // update the URL without posting
                // history.pushState({name: fileName}, fileName, fileName);
 
+               //if we do this, we'll have to manually handle
+               //clearing the html and changing it to be the game board
+
             });
+            $("#join").on("click", function(){
+                var player = getPlayerName();
+                var gameID = $('#gameList').val();
+                if (player.length <= 0){
+                    alert("please insert a name");
+                } else if(!gameID){
+                    alert("please select a game");
+                } else {
+                    serverSocket.emit("join", {
+                        playerName: player,
+                        gameID: gameID});
+                }
+            })
 
 
 
@@ -42,9 +63,20 @@
                 $('#gameList').html('');
                 var gameListLength = gameList.length;
                 for(var i = 0; i < gameListLength; i++) {
-                    $('#gameList').append('<li>' + gameList[i].id + '</li>');
+                    var disabled = "disabled";
+                    if(gameList[i].openToJoin){
+                        disabled = '';
+                    }
+                    $('#gameList').append('<option '+ disabled +' value ='+ gameList[i].id +'>' + gameList[i].id + '</option>');
                 }
-                
+                //to do: check if game is OpenToJoin, grey out if it isn't
+            });
+            serverSocket.on("join", function(data){
+                if(data.joined){
+                    //update view
+                } else {
+                    alert("failed to join game, please try again");
+                }
             });
         </script>
     </body>

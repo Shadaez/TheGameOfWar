@@ -4,7 +4,9 @@ Basic implementation of the card game War using Socket.io and Node.js
 
 
 To do:
-- [ ] Create Deck object with methods deal and shuffle
+- [x] Create Deck object with methods deal and shuffle
 - [ ] Create card comparitor
-- [ ] Create landing page
-- [ ] Complete Node server
+- [x] Create landing page
+- [x] Begin node server
+- [x] Add join function
+- [ ] Update project to use Backbone.js
