@@ -83,6 +83,18 @@ ioServer.sockets.on("connection", function(clientSocket) {
             //if they failed, their game list needs refreshing
         }
     });
+
+    clientSocket.on("submit-card", function(data) {
+        console.log(data.id);
+      var game = Games.Find(data.id);
+      game.CardHolder.push(data.card);
+      var numCards = game.CardHolder.length;
+      var numplayers = game.Players.length;
+      if (numCards === numplayers) {
+        var x = Deck.Compare(game.CardHolder);
+        clientSocket.emit('test', x);
+      }
+    });
 });
 
 httpServer.listen(3000);
