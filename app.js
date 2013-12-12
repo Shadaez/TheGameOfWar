@@ -82,7 +82,6 @@ ioServer.sockets.on("connection", function(clientSocket) {
             // clientSocket.broadcast.emit("updateGameList", Games.All);
             clientSocket.emit("switchToGame",Games.Find(data.gameID));
             var game = Games.Find(data.gameID);
-            console.log("GAAAAAAAAME" + game + "GAME ID " + data.gameID);
             pushToGame(game, "updatePlayerList", game);
             // _.each(game.Players, function(player){
             //     ioServer.sockets.socket(player.socket).emit("updatePlayerList");
