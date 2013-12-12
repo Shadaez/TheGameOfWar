@@ -97,12 +97,11 @@ ioServer.sockets.on("connection", function(clientSocket) {
     clientSocket.on("submit-card", function(data) {
       
       var game = Games.Find(data.id);
-      game.CardHolder.push(data.card);
+      game.CardHolder.push({socketid: clientSocket.id, card: data.card});
       var numCards = game.CardHolder.length;
+      {socketid = player.socket, card: }
       var numplayers = game.Players.length;
       if (numCards === numplayers) {
-        console.log(game.CardHolder);
-        console.log('-------------------------------');
         var x = Deck.Compare(game.CardHolder);
       }
       for (var i = 0; i < numplayers; i ++) {
