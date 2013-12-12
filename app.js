@@ -55,7 +55,6 @@ ioServer.sockets.on("connection", function(clientSocket) {
     });
     
     clientSocket.on('deal', function(data){
-        console.log(data);
         // var game = _.findWhere(Games.All, {id: data});
         var game = Games.Find(data);
         var players = game.Players;
@@ -63,7 +62,11 @@ ioServer.sockets.on("connection", function(clientSocket) {
         var deck = Deck.Deal(numplayers);
       
         for (var i = 0; i < numplayers; i ++) {
-            ioServer.sockets.socket(players[i].socket).emit("cardDecks", deck[i]);
+            console.log('socket');
+            console.log(players[i].socket);
+            console.log(deck[i]);
+            var z = players[i].socket;
+            ioServer.sockets.socket(z).emit("cardDecks", deck[i]);
         }
     });
 
@@ -82,9 +85,11 @@ ioServer.sockets.on("connection", function(clientSocket) {
             // clientSocket.broadcast.emit("updateGameList", Games.All);
             clientSocket.emit("switchToGame",Games.Find(data.gameID));
             var game=Games.Find(data.gameID);
+            
             _.each(game.Players, function(player){
                 ioServer.sockets.socket[player.socket].emit("updatePlayerList");
             });
+
         } else {
             clientSocket.emit("updateGameList", Games.All);
             //if they failed, their game list needs refreshing
