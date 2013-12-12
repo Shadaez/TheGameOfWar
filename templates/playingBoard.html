@@ -2,6 +2,7 @@
 <html>
     <head>
         <title>The Game of War</title>
+        <link rel="stylesheet" type="text/css" href="/playingBoard.css"/>
         <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
         <script src="//cdnjs.cloudflare.com/ajax/libs/underscore.js/1.5.2/underscore-min.js"></script>
 
@@ -22,7 +23,7 @@
                 <input type="button" id="join" value="Join Game">
             </form>
         </div>
-        <div id='board'>
+        <div id='board' class="clsHidden">
             <form id="GameStart">
                 <label for="Game">Game ID</label>
                 <input type="text" name="txtGame" value="" readonly>
@@ -30,6 +31,10 @@
                 <input type="button" id="start" value="Start Game">
                 <select id="playerList" name="players" size="5">
                 </select>
+                <div id="card1" class="card"></div>
+                <div id="card2" class="card"></div>
+                <div id="card3" class="card"></div>
+
             </form>
         </div>
         <script>
@@ -86,6 +91,16 @@
                 } else {
                     alert("failed to join game, please try again");
                 }
+            });
+            serverSocket.on("switchToGame", function(game){
+                console.log(game);
+                $("[name='txtGame']").val(game.id);
+                $('#playerList').html('');
+                var playerListLength = game.Players.length;
+                for(var i = 0; i < playerListLength; i++) {
+                    $('#playerList').append('<option>' + game.Players[i] + '</option>');
+                }
+                $('#main,#board').toggleClass("clsHidden");
             });
         </script>
     </body>

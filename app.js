@@ -9,27 +9,15 @@ var path = require("path"),
 // ExpressJS Server Definition
 var expressApp = express();
 expressApp.use(express.static(path.join(__dirname, 'templates')));
-// expressApp.set("views", path.join(__dirname, "templates"))
-   // .set("view engine", "hbs");
+expressApp.use(express.static(path.join(__dirname, 'css')));
 
 expressApp.get("/", function(req, res) {
      res.redirect("playingBoard.html");
 });
 
-expressApp.get("/game/:gameid", function(req, res) {
-     var gameid = req.param("gameid");
-});
-
-// expressApp.get("/:filename", function(req, res) {
-//     var filename = req.param("filename");
-
-//     if(!_.has(fileContent, filename)) {
-//         fileContent[filename] = "";
-//     }
-
-//     res.render("editor", {filename: filename, content: fileContent[filename]});
+// expressApp.get("/game/:gameid", function(req, res) {
+//      var gameid = req.param("gameid");
 // });
-
 
 // Create joined express and socket.io server
 var httpServer = http.createServer(expressApp)
@@ -44,8 +32,12 @@ ioServer.on("connection", function(clientSocket) {
 
     clientSocket.on("create", function(data) {
     	gameCounter ++;
-        Games.Add(gameCounter, data.playerName);
+        var player={};
+        player.name=data.playerName;
+        player.socket=clientSocket;
+        Games.Add(gameCounter, player);
         clientSocket.broadcast.emit("updateGameList", Games.All);
+        clientSocket.emit("switchToGame",Games.Find(gameCounter));
     });
     clientSocket.on("start", function(data) {
         console.log(data);
@@ -61,6 +53,7 @@ ioServer.on("connection", function(clientSocket) {
         });
         if (joined){
             clientSocket.broadcast.emit("updateGameList", Games.All);
+            clientSocket.emit("switchToGame",Games.Find(data.gameID));
         } else {
             clientSocket.emit("updateGameList", Games.All);
             //if they failed, their game list needs refreshing
