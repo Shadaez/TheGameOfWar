@@ -84,11 +84,13 @@ ioServer.sockets.on("connection", function(clientSocket) {
         if (joined){
             // clientSocket.broadcast.emit("updateGameList", Games.All);
             clientSocket.emit("switchToGame",Games.Find(data.gameID));
-            var game=Games.Find(data.gameID);
-
-            _.each(game.Players, function(player){
-                ioServer.sockets.socket(player.socket).emit("updatePlayerList");
-            });
+            var game = Games.Find(data.gameID);
+            console.log("GAAAAAAAAME" + game + "GAME ID " + data.gameID);
+            pushToGame(game, "updatePlayerList", game);
+            // _.each(game.Players, function(player){
+            //     ioServer.sockets.socket(player.socket).emit("updatePlayerList");
+            // });
+            
 
         } else {
             clientSocket.emit("updateGameList", Games.All);
@@ -108,6 +110,14 @@ ioServer.sockets.on("connection", function(clientSocket) {
       }
     });
 });
+
+function pushToGame(game, eventname, data){
+    var numplayers = game.Players.length;
+    for (var i = 0; i < numplayers; i ++) {
+        var playerSocket = game.Players[i].socket;
+        ioServer.sockets.socket(playerSocket).emit(eventname, data);
+    }
+}
 
 httpServer.listen(3000);
 console.log("Started The Game of War on port 3000");
