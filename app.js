@@ -62,7 +62,7 @@ ioServer.sockets.on("connection", function(clientSocket) {
         var deck = Deck.Deal(numplayers);
       
         for (var i = 0; i < numplayers; i ++) {
-            ioServer.sockets.socket(players[i]).emit("cardDecks", deck[i]);
+            ioServer.sockets.socket(players[i].socket).emit("cardDecks", deck[i]);
         }
     });
 
@@ -86,6 +86,18 @@ ioServer.sockets.on("connection", function(clientSocket) {
             clientSocket.emit("updateGameList", Games.All);
             //if they failed, their game list needs refreshing
         }
+    });
+
+    clientSocket.on("submit-card", function(data) {
+        console.log(data.id);
+      var game = Games.Find(data.id);
+      game.CardHolder.push(data.card);
+      var numCards = game.CardHolder.length;
+      var numplayers = game.Players.length;
+      if (numCards === numplayers) {
+        var x = Deck.Compare(game.CardHolder);
+        clientSocket.emit('test', x);
+      }
     });
 });
 

@@ -322,6 +322,12 @@ Deck.Compare = function () {
 		}
 		return (submission.card.value + suitValue);
 	});
+
+
+
+
+	return maxCard;
+
 }
 
 module.exports = Deck;

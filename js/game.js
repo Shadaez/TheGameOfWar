@@ -10,8 +10,13 @@ Games.Add = function(gameID, player){
 	var game={};
 	game.id=gameID;
 	game.Players=[];
+
+	game.CardHolder = [];
+	game.Players.push(player1Id);
+
 	player.id=1;
 	game.Players.push(player);
+
 	game.openToJoin=true;
 	Games.All.push(game);
 	console.log("Games.ADD" + game);
