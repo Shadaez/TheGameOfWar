@@ -1,295 +1,44 @@
-var Deck = {};
 var _ = require("underscore");
+var Deck = {};
 
-Deck.Cards = function () { return [
-
-	/* ------ club ------ */
-	{
-		value:0,
-		name:"2",
-		suit:"club"
-	},
-	{
-		value:1,
-		name:"3",
-		suit:"club"
-	},
-	{
-		value:2,
-		name:"4",
-		suit:"club"
-	},
-	{
-		value:3,
-		name:"5",
-		suit:"club"
-	},
-	{
-		value:4,
-		name:"6",
-		suit:"club"
-	},
-	{
-		value:5,
-		name:"7",
-		suit:"club"
-	},
-	{
-		value:6,
-		name:"8",
-		suit:"club"
-	},
-	{
-		value:7,
-		name:"9",
-		suit:"club"
-	},
-	{
-		value:8,
-		name:"10",
-		suit:"club"
-	},
-	{
-		value:9,
-		name:"Jack",
-		suit:"club"
-	},
-	{
-		value:10,
-		name:"Queen",
-		suit:"club"
-	},
-	{
-		value:11,
-		name:"King",
-		suit:"club"
-	},
-	{
-		value:12,
-		name:"Ace",
-		suit:"club"
-	},
-	
-	/* ----- spade ----- */
-	{
-		value:0,
-		name:"2",
-		suit:"spade"
-	},
-	{
-		value:1,
-		name:"3",
-		suit:"spade"
-	},
-	{
-		value:2,
-		name:"4",
-		suit:"spade"
-	},
-	{
-		value:3,
-		name:"5",
-		suit:"spade"
-	},
-	{
-		value:4,
-		name:"6",
-		suit:"spade"
-	},
-	{
-		value:5,
-		name:"7",
-		suit:"spade"
-	},
-	{
-		value:6,
-		name:"8",
-		suit:"spade"
-	},
-	{
-		value:7,
-		name:"9",
-		suit:"spade"
-	},
-	{
-		value:8,
-		name:"10",
-		suit:"spade"
-	},
-	{
-		value:9,
-		name:"Jack",
-		suit:"spade"
-	},
-	{
-		value:10,
-		name:"Queen",
-		suit:"spade"
-	},
-	{
-		value:11,
-		name:"King",
-		suit:"spade"
-	},
-	{
-		value:12,
-		name:"Ace",
-		suit:"spade"
-	},
-
-	/* ----- heart ----- */
-	{
-		value:0,
-		name:"2",
-		suit:"heart"
-	},
-	{
-		value:1,
-		name:"3",
-		suit:"heart"
-	},
-	{
-		value:2,
-		name:"4",
-		suit:"heart"
-	},
-	{
-		value:3,
-		name:"5",
-		suit:"heart"
-	},
-	{
-		value:4,
-		name:"6",
-		suit:"heart"
-	},
-	{
-		value:5,
-		name:"7",
-		suit:"heart"
-	},
-	{
-		value:6,
-		name:"8",
-		suit:"heart"
-	},
-	{
-		value:7,
-		name:"9",
-		suit:"heart"
-	},
-	{
-		value:8,
-		name:"10",
-		suit:"heart"
-	},
-	{
-		value:9,
-		name:"Jack",
-		suit:"heart"
-	},
-	{
-		value:10,
-		name:"Queen",
-		suit:"heart"
-	},
-	{
-		value:11,
-		name:"King",
-		suit:"heart"
-	},
-	{
-		value:12,
-		name:"Ace",
-		suit:"heart"
-	},
-
-	/* ----- diamond ----- */
-	{
-		value:0,
-		name:"2",
-		suit:"diamond"
-	},
-	{
-		value:1,
-		name:"3",
-		suit:"diamond"
-	},
-	{
-		value:2,
-		name:"4",
-		suit:"diamond"
-	},
-	{
-		value:3,
-		name:"5",
-		suit:"diamond"
-	},
-	{
-		value:4,
-		name:"6",
-		suit:"diamond"
-	},
-	{
-		value:5,
-		name:"7",
-		suit:"diamond"
-	},
-	{
-		value:6,
-		name:"8",
-		suit:"diamond"
-	},
-	{
-		value:7,
-		name:"9",
-		suit:"diamond"
-	},
-	{
-		value:8,
-		name:"10",
-		suit:"diamond"
-	},
-	{
-		value:9,
-		name:"Jack",
-		suit:"diamond"
-	},
-	{
-		value:10,
-		name:"Queen",
-		suit:"diamond"
-	},
-	{
-		value:11,
-		name:"King",
-		suit:"diamond"
-	},
-	{
-		value:12,
-		name:"Ace",
-		suit:"diamond"
+Deck.Cards = function () { 
+	var cards=[];
+	var cardName=["Jack","Queen","King","Ace"]
+	var suits=["heart","spade","diamond","club"];
+	for (var j=0;j<=3;j++){ //runs for each suit
+		for (var i=0;i<=12;i++){ //runs for each card in a suit.
+			var tmp ={};
+			tmp.value=i;
+			if ( i<9){
+				tmp.name ="" + (2+i);
+			}else{
+				tmp.name= cardName[i%9];
+			}
+			tmp.suit=suits[j];
+			cards.push(tmp);
+		}
 	}
-];}
+	return cards;
+}
 
+//generates a random number between 0 & 52 and swaps the card between i & random number.
 Deck.Shuffle = function () {
-	var shuffledDeck = [];
-
-	function shuffle(o){ //v1.0
-	    for(var j, x, i = o.length; i; j = Math.floor(Math.random() * i), x = o[--i], o[i] = o[j], o[j] = x);
-	    return o;
-	};
-
-	shuffledDeck = shuffle(new Deck.Cards);
+	var shuffledDeck = new Deck.Cards;
+    var tmp;
+    for(var i=shuffledDeck.length-1; i>=0; i--){
+        var j = Math.floor(Math.random() * shuffledDeck.length);
+        tmp = shuffledDeck[i];
+        shuffledDeck[i] = shuffledDeck[j];
+        shuffledDeck[j] = tmp;
+    }
 	return shuffledDeck;
 }
 
-
+//splits the shuffled deck among the players evenly
 Deck.Deal = function (numPlayers) {
 	var userCards = [];
 	var shuffledDeck = Deck.Shuffle();
 	var numCards = Math.floor(52/numPlayers);
-	console.log(numCards);
 
 	for (var i = 0; i < numPlayers; i++) {
 		userCards[i] = shuffledDeck.splice(0, numCards);
@@ -297,14 +46,9 @@ Deck.Deal = function (numPlayers) {
 	return userCards;
 }
 
+// expects a array of objects. Each object has name of player and a card object
+//{playername: 'Name',card: {value:5,name:"2",suit:"spade"}};
 Deck.Compare = function (cardArray) {
-	//expects any number of arguments in the following format
-	// {playername: 'Name',
-	// 	card: {
-	// 		value:5,
-	// 		name:"2",
-	// 		suit:"spade",
-	// 	}};
 	var maxCard = _.max(cardArray, function (submission) {
 		var suitValue;
 		console.log(submission.suit);
@@ -324,12 +68,7 @@ Deck.Compare = function (cardArray) {
 		}
 		return (submission.value + suitValue);
 	});
-
-
-
-
 	return maxCard;
-
 }
 
 module.exports = Deck;
