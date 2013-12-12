@@ -43,13 +43,15 @@ function ready() { //start jQuery
         }
     });
 
-    $('#submit_card').on('click', function() {
-        var selection = $('.active-card').data('value');
+    $('body').on('click', '#submit_card', function() {
+        console.log('submit');
+        var selection = $('.active-card').data('index');
         var gameID = $('#board').data('gameID');
         var cardSlice = UserCards.splice(selection, 1);
+        console.dir(cardSlice);
         var data = {
             id: gameID,
-            card: cardSlice
+            card: cardSlice[0]
         };
         serverSocket.emit("submit-card", data);
     });
@@ -102,7 +104,7 @@ serverSocket.on("cardDecks", function(cards) {
     display3Cards();
 
     $('body').append('<div id="submit_card">Submit Card!</div>');
-    $('#game_board').on('click', '.card', function() {
+    $('#board').on('click', '.card', function() {
         $('.active-card').removeClass('active-card');
         $(this).addClass('active-card');
     });
