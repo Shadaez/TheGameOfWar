@@ -82,9 +82,11 @@
                         gameID: gameID});
                 }
             });
+
             serverSocket.on("updateGameList", function(gameList) {
                 
                 $('#gameList').html('');
+                console.dir(gameList);
                 var gameListLength = gameList.length;
                 for(var i = 0; i < gameListLength; i++) {
                     var disabled = "disabled";
@@ -95,22 +97,24 @@
                 }
                 //to do: check if game is OpenToJoin, grey out if it isn't
             });
+
             serverSocket.on("join", function(data){
                 if(data.success){
                     //update view? YES!!
-                    // history.pushState({name: fileName}, fileName, fileName);
                     $('#deal').data('gameID', data.gameID);
                 } else {
                     alert("failed to join game, please try again");
                 }
             });
+
             serverSocket.on("switchToGame", function(game){
                 console.log(game);
                 $("[name='txtGame']").val(game.id);
                 $('#playerList').html('');
                 var playerListLength = game.Players.length;
+                console.log("player length" + playerListLength)
                 for(var i = 0; i < playerListLength; i++) {
-                    $('#playerList').append('<option>' + game.Players[i] + '</option>');
+                    $('#playerList').append('<option>' + game.Players[i].name + '</option>');
                 }
                 $('#main,#board').toggleClass("clsHidden");
             });
@@ -134,8 +138,7 @@
                     var cardSlice = UserCards.splice(selection, 1);
                     console.dir(cardSlice);
                     console.dir(UserCards);
-                });
-                
+                });               
             });
 
             function display3Cards () {
@@ -143,6 +146,7 @@
                  $('#game_board').append('<div data-value' + i + ' class="card">' + UserCards[i].name + UserCards[i].suit + '</div>');
                 }
             }
+
         </script>
     </body>
 </html>

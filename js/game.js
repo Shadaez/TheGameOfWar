@@ -14,6 +14,7 @@ Games.Add = function(gameID, player){
 	game.Players.push(player);
 	game.openToJoin=true;
 	Games.All.push(game);
+	console.log("Games.ADD" + game);
 }
 
 //finds gameID, returns reference to game object
@@ -27,11 +28,12 @@ Games.Join = function(gameID, player){
 	if(game.Players.length < Games.Max){
 		player.id=game.Players.Length+1;
 		game.Players.push(player);
+		console.log("Join" + player);
 		return true;
 	} else {
 		return false;
 	}
-	
+	console.log(player);
 }
 
 Games.Start = function(gameID){

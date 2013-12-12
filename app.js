@@ -14,7 +14,6 @@ expressApp.use(express.static(path.join(__dirname, 'css')));
 // expressApp.set("views", path.join(__dirname, "templates"))
    // .set("view engine", "hbs");
 
-
 expressApp.get("/", function(req, res) {
      res.redirect("playingBoard.html");
 });
@@ -38,16 +37,16 @@ ioServer.sockets.on("connection", function(clientSocket) {
     	gameCounter ++;
         var player={};
         player.name=data.playerName;
-        player.socket=clientSocket;
+        player.socket=clientSocket.id;
         Games.Add(gameCounter, player);
         clientSocket.broadcast.emit("updateGameList", Games.All);
         clientSocket.emit("switchToGame",Games.Find(gameCounter));
-
-        Games.Add(gameCounter, clientSocket.id);// we need to store client socket id's to push to correct players
-        clientSocket.broadcast.emit("updateGameList", Games.All);
-        clientSocket.emit("updateGameList", Games.All);
-
+        console.log(Games.All);
+        // Games.Add(gameCounter, clientSocket.id);// we need to store client socket id's to push to correct players
+        // clientSocket.broadcast.emit("updateGameList", Games.All);
+        // clientSocket.emit("updateGameList", Games.All);
     });
+
     clientSocket.on("start", function(data) {
         console.log(data);
         Games.Start(data.gameID);
@@ -65,19 +64,24 @@ ioServer.sockets.on("connection", function(clientSocket) {
         for (var i = 0; i < numplayers; i ++) {
             ioServer.sockets.socket(players[i]).emit("cardDecks", deck[i]);
         }
-
     });
 
     clientSocket.on("join", function(data) {
-        var joined = Games.Join(data.gameID, clientSocket.id);
+        var player={};
+        player.name=data.playerName;
+        player.socket=clientSocket.id;
+        console.log("app.js " + gameCounter, player);
+        var joined = Games.Join(data.gameID, player);
         console.log(joined);
         clientSocket.emit("join", {
             success: joined,
             gameID: data.gameID // so that start button knows which game to join
         });
         if (joined){
-            clientSocket.broadcast.emit("updateGameList", Games.All);
-            clientSocket.emit("switchToGame",Games.Find(data.gameID));
+            // clientSocket.broadcast.emit("updateGameList", Games.All);
+            // clientSocket.emit("switchToGame",Games.Find(data.gameID));
+            var game=Games.Find(data.gameID);
+            _.each(game.Players)
         } else {
             clientSocket.emit("updateGameList", Games.All);
             //if they failed, their game list needs refreshing
