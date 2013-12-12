@@ -79,9 +79,11 @@ ioServer.sockets.on("connection", function(clientSocket) {
         });
         if (joined){
             // clientSocket.broadcast.emit("updateGameList", Games.All);
-            // clientSocket.emit("switchToGame",Games.Find(data.gameID));
+            clientSocket.emit("switchToGame",Games.Find(data.gameID));
             var game=Games.Find(data.gameID);
-            _.each(game.Players)
+            _.each(game.Players, function(player){
+                ioServer.sockets.socket[player.socket].emit("updatePlayerList");
+            });
         } else {
             clientSocket.emit("updateGameList", Games.All);
             //if they failed, their game list needs refreshing
