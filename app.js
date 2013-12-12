@@ -62,9 +62,6 @@ ioServer.sockets.on("connection", function(clientSocket) {
         var deck = Deck.Deal(numplayers);
       
         for (var i = 0; i < numplayers; i ++) {
-            console.log('socket');
-            console.log(players[i].socket);
-            console.log(deck[i]);
             var z = players[i].socket;
             ioServer.sockets.socket(z).emit("cardDecks", deck[i]);
         }
@@ -97,14 +94,19 @@ ioServer.sockets.on("connection", function(clientSocket) {
     });
 
     clientSocket.on("submit-card", function(data) {
-        console.log(data.id);
+      
       var game = Games.Find(data.id);
       game.CardHolder.push(data.card);
       var numCards = game.CardHolder.length;
       var numplayers = game.Players.length;
       if (numCards === numplayers) {
+        console.log(game.CardHolder);
+        console.log('-------------------------------');
         var x = Deck.Compare(game.CardHolder);
-        clientSocket.emit('test', x);
+      }
+      for (var i = 0; i < numplayers; i ++) {
+            var z = game.Players[i].socket;
+            ioServer.sockets.socket(z).emit('test', x);
       }
     });
 });

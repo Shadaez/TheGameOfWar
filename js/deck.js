@@ -1,4 +1,5 @@
 var Deck = {};
+var _ = require("underscore");
 
 Deck.Cards = function () { return [
 
@@ -296,7 +297,7 @@ Deck.Deal = function (numPlayers) {
 	return userCards;
 }
 
-Deck.Compare = function () {
+Deck.Compare = function (cardArray) {
 	//expects any number of arguments in the following format
 	// {playername: 'Name',
 	// 	card: {
@@ -304,9 +305,10 @@ Deck.Compare = function () {
 	// 		name:"2",
 	// 		suit:"spade",
 	// 	}};
-	var maxCard = _.max(arguments, function (submission) {
+	var maxCard = _.max(cardArray, function (submission) {
 		var suitValue;
-		switch (submission.card.suit) {
+		console.log(submission.suit);
+		switch (submission.suit) {
 			case "spade":
 				suitValue = .1;
 				break;
@@ -320,7 +322,7 @@ Deck.Compare = function () {
 				suitValue = .4;
 				break;
 		}
-		return (submission.card.value + suitValue);
+		return (submission.value + suitValue);
 	});
 
 
