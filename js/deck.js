@@ -292,7 +292,6 @@ Deck.Deal = function (numPlayers) {
 
 	for (var i = 0; i < numPlayers; i++) {
 		userCards[i] = shuffledDeck.splice(0, numCards);
-		console.dir(userCards[i]);
 	}
 	return userCards;
 }

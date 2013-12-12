@@ -14,3 +14,4 @@ To do:
 - [ ] Prettyfy the project (bootstrap)
 - [ ] Update project to use Backbone.js
 - [ ] Add Group functionality with chat
+- [ ] Move JS to separate file, outside of the html.

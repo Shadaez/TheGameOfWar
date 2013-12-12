@@ -1,0 +1,16 @@
+.card {
+	width:100px;
+	height:250px;
+	background-color: blue;
+	float:left;
+	margin-left: 20px;
+
+}
+
+.active-card {
+	background-color: red !important;
+}
+
+#submit_card {
+	float:left;
+}

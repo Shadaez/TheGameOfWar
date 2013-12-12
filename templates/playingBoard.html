@@ -8,6 +8,8 @@
 
         <!-- socket.io library -->
         <script src="/socket.io/socket.io.js"></script>
+
+        <link rel='stylesheet' type='text/css' href='main.css'>
     </head>
 
     <body>
@@ -21,6 +23,7 @@
                 <select id="gameList" name="games" size="5">
                 </select>
                 <input type="button" id="join" value="Join Game">
+                <input type="button" id="deal" value="Deal Game">
             </form>
         </div>
         <div id='board' class="clsHidden">
@@ -28,7 +31,7 @@
                 <label for="Game">Game ID</label>
                 <input type="text" name="txtGame" value="" readonly>
                 <br/>
-                <input type="button" id="start" value="Start Game">
+                <input type="button" id="start" value="Start">
                 <select id="playerList" name="players" size="5">
                 </select>
                 <div id="card1" class="card"></div>
@@ -39,7 +42,8 @@
         </div>
         <script>
             var serverSocket = io.connect("http://localhost");
-           
+            var UserCards;
+
             $("#start").on("click", function() {
                 var gameId=$("[name='txtGame']").val();
                 serverSocket.emit("create", {gameId:gameId});
@@ -59,9 +63,15 @@
                //clearing the html and changing it to be the game board
 
             });
+            $('#deal').on('click', function () {
+                var gameID = $("#deal").data("gameID");
+                serverSocket.emit("deal", gameID);
+            });
+
             $("#join").on("click", function(){
                 var player = $("[name='playerName']").val();
                 var gameID = $('#gameList').val();
+                console.log(gameID);
                 if (player.length <= 0){
                     alert("please insert a name");
                 } else if(!gameID){
@@ -87,7 +97,9 @@
             });
             serverSocket.on("join", function(data){
                 if(data.success){
-                    //update view?
+                    //update view? YES!!
+                    // history.pushState({name: fileName}, fileName, fileName);
+                    $('#deal').data('gameID', data.gameID);
                 } else {
                     alert("failed to join game, please try again");
                 }
@@ -102,6 +114,35 @@
                 }
                 $('#main,#board').toggleClass("clsHidden");
             });
+
+            serverSocket.on("cardDecks", function(cards){
+                UserCards = cards;
+                $('body').html('');
+                $('body').append('<div id="game_board"></div>');
+                
+                display3Cards();
+
+                $('body').append('<div id="submit_card">Submit Card!</div>');
+                $('#game_board').on('click', '.card', function () {
+                    $('.active-card').removeClass('active-card');
+                    $(this).addClass('active-card');
+                });
+
+                $('#submit_card').on('click', function () {
+                    var selection = $('.active-card').data('value');
+                    console.dir(UserCards);
+                    var cardSlice = UserCards.splice(selection, 1);
+                    console.dir(cardSlice);
+                    console.dir(UserCards);
+                });
+                
+            });
+
+            function display3Cards () {
+                for(var i = 0; i < 3; i++) {
+                 $('#game_board').append('<div data-value' + i + ' class="card">' + UserCards[i].name + UserCards[i].suit + '</div>');
+                }
+            }
         </script>
     </body>
 </html>
