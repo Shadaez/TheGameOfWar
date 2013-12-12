@@ -23,7 +23,7 @@ function ready() { //start jQuery
     });
 
     $('#deal').on('click', function() {
-        var gameID = $("#deal").data("gameID");
+        var gameID = $("#board").data("gameID");
         serverSocket.emit("deal", gameID);
     });
 
@@ -45,7 +45,7 @@ function ready() { //start jQuery
 
     $('#submit_card').on('click', function() {
         var selection = $('.active-card').data('value');
-        var gameID = $('#game_board').data('gameID');
+        var gameID = $('#board').data('gameID');
         var cardSlice = UserCards.splice(selection, 1);
         var data = {
             id: gameID,
@@ -95,14 +95,13 @@ serverSocket.on("switchToGame", function(game) {
         $('#playerList').append('<option>' + game.Players[i].name + '</option>');
     }
     $('#main,#board').toggleClass("clsHidden");
+    $('#board').data('gameID', game.id);
 
 });
 
 serverSocket.on("cardDecks", function(cards) {
     UserCards = cards;
-    var gameID = 1;
-    $('body').html('');
-    $('body').append('<div data-gameID=' + gameID + ' id="game_board"></div>');
+    console.dir(UserCards);
     display3Cards();
 
     $('body').append('<div id="submit_card">Submit Card!</div>');
@@ -114,6 +113,6 @@ serverSocket.on("cardDecks", function(cards) {
 
 function display3Cards() {
     for (var i = 0; i < 3; i++) {
-        $('#game_board').append('<div data-value=' + i + ' class="card">' + UserCards[i].name + UserCards[i].suit + '</div>');
+        $('#card' + (i +1)).append(UserCards[i].name + UserCards[i].suit);
     }
 }
