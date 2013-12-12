@@ -12,7 +12,6 @@ Games.Add = function(gameID, player){
 	game.Players=[];
 
 	game.CardHolder = [];
-	game.Players.push(player1Id);
 
 	player.id=1;
 	game.Players.push(player);
