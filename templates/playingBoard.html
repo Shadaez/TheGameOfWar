@@ -23,7 +23,7 @@
                 <select id="gameList" name="games" size="5">
                 </select>
                 <input type="button" id="join" value="Join Game">
-                <input type="button" id="deal" value="Deal Game">
+                
             </form>
         </div>
         <div id='board' class="clsHidden">
@@ -37,6 +37,7 @@
                 <div id="card1" class="card"></div>
                 <div id="card2" class="card"></div>
                 <div id="card3" class="card"></div>
+                <input type="button" id="deal" value="Deal Game">
 
             </form>
         </div>
@@ -52,17 +53,12 @@
             $("#create").on("click", function() {
                 var player = $("[name='playerName']").val();
                 if (player.length <= 0){
-                    alert("please insert a name")
+                    alert("Please insert a name")
                 } else {
                     serverSocket.emit("create", {playerName:player});
                 }
-                // update the URL without posting
-               // history.pushState({name: fileName}, fileName, fileName);
-
-               //if we do this, we'll have to manually handle
-               //clearing the html and changing it to be the game board
-
             });
+
             $('#deal').on('click', function () {
                 var gameID = $("#deal").data("gameID");
                 serverSocket.emit("deal", gameID);
@@ -71,11 +67,11 @@
             $("#join").on("click", function(){
                 var player = $("[name='playerName']").val();
                 var gameID = $('#gameList').val();
-                console.log(gameID);
+                console.log("game selected" + gameID);
                 if (player.length <= 0){
-                    alert("please insert a name");
+                    alert("Please insert a name");
                 } else if(!gameID){
-                    alert("please select a game");
+                    alert("Please select a game");
                 } else {
                     serverSocket.emit("join", {
                         playerName: player,
@@ -86,7 +82,7 @@
             serverSocket.on("updateGameList", function(gameList) {
                 
                 $('#gameList').html('');
-                console.dir(gameList);
+                console.dir("games received" + gameList);
                 var gameListLength = gameList.length;
                 for(var i = 0; i < gameListLength; i++) {
                     var disabled = "disabled";
@@ -101,7 +97,8 @@
             serverSocket.on("join", function(data){
                 if(data.success){
                     //update view? YES!!
-                    $('#deal').data('gameID', data.gameID);
+                    //$('#deal').data('gameID', data.gameID);
+                    console.log("in join" +data);
                 } else {
                     alert("failed to join game, please try again");
                 }
