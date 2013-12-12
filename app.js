@@ -8,8 +8,9 @@ var path = require("path"),
 
 // ExpressJS Server Definition
 var expressApp = express();
-expressApp.use(express.static(path.join(__dirname, 'templates')));
-expressApp.use(express.static(path.join(__dirname, 'css')));
+expressApp.use(express.static(path.join(__dirname, 'templates')))
+          .use(express.static(path.join(__dirname, 'css')))
+          .use(express.static(path.join(__dirname, 'js')));
 
 // expressApp.set("views", path.join(__dirname, "templates"))
    // .set("view engine", "hbs");
@@ -40,7 +41,7 @@ ioServer.sockets.on("connection", function(clientSocket) {
         player.socket=clientSocket.id;
         Games.Add(gameCounter, player);
         clientSocket.broadcast.emit("updateGameList", Games.All);
-        clientSocket.emit("switchToGame",Games.Find(gameCounter));
+        clientSocket.emit("switchToGame" ,Games.Find(gameCounter));
         console.log(Games.All);
         // Games.Add(gameCounter, clientSocket.id);// we need to store client socket id's to push to correct players
         // clientSocket.broadcast.emit("updateGameList", Games.All);
