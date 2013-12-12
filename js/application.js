@@ -94,7 +94,9 @@ serverSocket.on("switchToGame", function(game) {
     var playerListLength = game.Players.length;
     console.log("player length" + playerListLength)
     for (var i = 0; i < playerListLength; i++) {
-        $('#playerList').append('<option>' + game.Players[i].name + '</option>');
+        $('#playerList').append('<option></option>')
+        .find("option:last").text(game.Players[i].name);
+            //so that the names are escaped
     }
     $('#main,#board').toggleClass("clsHidden");
     $('#board').data('gameID', game.id);
