@@ -10,6 +10,7 @@ var path = require("path"),
 var expressApp = express();
 expressApp.use(express.static(path.join(__dirname, 'templates')));
 expressApp.use(express.static(path.join(__dirname, 'css')));
+
 // expressApp.set("views", path.join(__dirname, "templates"))
    // .set("view engine", "hbs");
 
@@ -17,20 +18,9 @@ expressApp.get("/", function(req, res) {
      res.redirect("playingBoard.html");
 });
 
-expressApp.get("/game/:gameid", function(req, res) {
-     var gameid = req.param("gameid");
-});
-
-// expressApp.get("/:filename", function(req, res) {
-//     var filename = req.param("filename");
-
-//     if(!_.has(fileContent, filename)) {
-//         fileContent[filename] = "";
-//     }
-
-//     res.render("editor", {filename: filename, content: fileContent[filename]});
+// expressApp.get("/game/:gameid", function(req, res) {
+//      var gameid = req.param("gameid");
 // });
-
 
 // Create joined express and socket.io server
 var httpServer = http.createServer(expressApp)
@@ -45,10 +35,18 @@ ioServer.sockets.on("connection", function(clientSocket) {
 
     clientSocket.on("create", function(data) {
     	gameCounter ++;
-        Games.Add(gameCounter, clientSocket.id);// we need to store client socket id's to push to correct players
+        var player={};
+        player.name=data.playerName;
+        player.socket=clientSocket.id;
+        Games.Add(gameCounter, player);
         clientSocket.broadcast.emit("updateGameList", Games.All);
-        clientSocket.emit("updateGameList", Games.All);
+        clientSocket.emit("switchToGame",Games.Find(gameCounter));
+        console.log(Games.All);
+        // Games.Add(gameCounter, clientSocket.id);// we need to store client socket id's to push to correct players
+        // clientSocket.broadcast.emit("updateGameList", Games.All);
+        // clientSocket.emit("updateGameList", Games.All);
     });
+
     clientSocket.on("start", function(data) {
         console.log(data);
         Games.Start(data.gameID);
@@ -64,20 +62,26 @@ ioServer.sockets.on("connection", function(clientSocket) {
         var deck = Deck.Deal(numplayers);
       
         for (var i = 0; i < numplayers; i ++) {
-            ioServer.sockets.socket(players[i]).emit("cardDecks", deck[i]);
+            ioServer.sockets.socket(players[i].socket).emit("cardDecks", deck[i]);
         }
-
     });
 
     clientSocket.on("join", function(data) {
-        var joined = Games.Join(data.gameID, clientSocket.id);
+        var player={};
+        player.name=data.playerName;
+        player.socket=clientSocket.id;
+        console.log("app.js " + gameCounter, player);
+        var joined = Games.Join(data.gameID, player);
         console.log(joined);
         clientSocket.emit("join", {
             success: joined,
             gameID: data.gameID // so that start button knows which game to join
         });
         if (joined){
-            clientSocket.broadcast.emit("updateGameList", Games.All);
+            // clientSocket.broadcast.emit("updateGameList", Games.All);
+            // clientSocket.emit("switchToGame",Games.Find(data.gameID));
+            var game=Games.Find(data.gameID);
+            _.each(game.Players)
         } else {
             clientSocket.emit("updateGameList", Games.All);
             //if they failed, their game list needs refreshing

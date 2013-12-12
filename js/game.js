@@ -5,16 +5,21 @@ var Games = {};
 Games.All=[];
 Games.Max=6;
 
-Games.Add = function(gameID, player1Id){
+Games.Add = function(gameID, player){
+	//player should have player name & socket. Function would append id
 	var game={};
 	game.id=gameID;
 	game.Players=[];
+
 	game.CardHolder = [];
 	game.Players.push(player1Id);
+
+	player.id=1;
+	game.Players.push(player);
+
 	game.openToJoin=true;
 	Games.All.push(game);
-	//we need to know size of the game
-	//to check if it's ready to start / if players can join
+	console.log("Games.ADD" + game);
 }
 
 //finds gameID, returns reference to game object
@@ -22,16 +27,18 @@ Games.Find = function(gameID) {
 	return _.findWhere(Games.All, {id: parseInt(gameID)});
 }
 
-Games.Join = function(gameID, playerID){
-	//if game is full, return false, else v
+Games.Join = function(gameID, player){
+	//if game is full, return false, else true
 	var game = Games.Find(gameID);
 	if(game.Players.length < Games.Max){
-		game.Players.push(playerID);
+		player.id=game.Players.Length+1;
+		game.Players.push(player);
+		console.log("Join" + player);
 		return true;
 	} else {
 		return false;
 	}
-	
+	console.log(player);
 }
 
 Games.Start = function(gameID){

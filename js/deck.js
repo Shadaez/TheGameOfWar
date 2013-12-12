@@ -68,11 +68,8 @@ Deck.Cards = function () { return [
 		name:"Ace",
 		suit:"club"
 	},
-
-
+	
 	/* ----- spade ----- */
-
-
 	{
 		value:0,
 		name:"2",
@@ -138,12 +135,8 @@ Deck.Cards = function () { return [
 		name:"Ace",
 		suit:"spade"
 	},
-
-
 
 	/* ----- heart ----- */
-
-
 	{
 		value:0,
 		name:"2",
@@ -210,10 +203,7 @@ Deck.Cards = function () { return [
 		suit:"heart"
 	},
 
-
 	/* ----- diamond ----- */
-
-
 	{
 		value:0,
 		name:"2",
@@ -279,14 +269,9 @@ Deck.Cards = function () { return [
 		name:"Ace",
 		suit:"diamond"
 	}
-
-
-
-]}
-
+];}
 
 Deck.Shuffle = function () {
-
 	var shuffledDeck = [];
 
 	function shuffle(o){ //v1.0
@@ -295,7 +280,6 @@ Deck.Shuffle = function () {
 	};
 
 	shuffledDeck = shuffle(new Deck.Cards);
-
 	return shuffledDeck;
 }
 
@@ -303,13 +287,12 @@ Deck.Shuffle = function () {
 Deck.Deal = function (numPlayers) {
 	var userCards = [];
 	var shuffledDeck = Deck.Shuffle();
-
 	var numCards = Math.floor(52/numPlayers);
-	// var numCards = (numPlayers / 52)*numPlayers;
+	console.log(numCards);
+
 	for (var i = 0; i < numPlayers; i++) {
 		userCards[i] = shuffledDeck.splice(0, numCards);
 	}
-
 	return userCards;
 }
 
@@ -339,15 +322,15 @@ Deck.Compare = function () {
 		}
 		return (submission.card.value + suitValue);
 	});
+
+
+
+
 	return maxCard;
+
 }
 
 module.exports = Deck;
-
-
-// Deck.Compare = function () {
-	
-// }
 
 
 
