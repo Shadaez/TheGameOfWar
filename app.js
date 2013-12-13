@@ -10,18 +10,12 @@ var path = require("path"),
 var expressApp = express();
 expressApp.use(express.static(path.join(__dirname, 'templates')))
           .use(express.static(path.join(__dirname, 'css')))
-          .use(express.static(path.join(__dirname, 'js')));
-
-// expressApp.set("views", path.join(__dirname, "templates"))
-   // .set("view engine", "hbs");
+          .use(express.static(path.join(__dirname, 'js')))
+          .use(express.static(path.join(__dirname, 'bower_components')));
 
 expressApp.get("/", function(req, res) {
      res.redirect("playingBoard.html");
 });
-
-// expressApp.get("/game/:gameid", function(req, res) {
-//      var gameid = req.param("gameid");
-// });
 
 // Create joined express and socket.io server
 var httpServer = http.createServer(expressApp)
@@ -99,7 +93,7 @@ ioServer.sockets.on("connection", function(clientSocket) {
       var game = Games.Find(data.id);
       game.CardHolder.push({socketid: clientSocket.id, card: data.card});
       var numCards = game.CardHolder.length;
-      {socketid = player.socket, card: }
+      //{socketid = player.socket, card: }
       var numplayers = game.Players.length;
       if (numCards === numplayers) {
         var x = Deck.Compare(game.CardHolder);
