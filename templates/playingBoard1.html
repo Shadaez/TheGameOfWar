@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>The Game of War</title>
+   
+  <!-- CSS libraries -->
+  <link href="/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+  <link href="/bootstrap/css/bootstrap-responsive.min.css" rel="stylesheet">
+  <link rel="stylesheet" type="text/css" href="/playingBoard.css"/>
+
+  <!-- Script Libraries -->
+  <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/underscore.js/1.5.2/underscore-min.js"></script>
+  <script src="/bootstrap/js/bootstrap.min.js"></script>
+  <script src="/socket.io/socket.io.js"></script>
+</head>
+
+  <body>
+    <div class="navbar navbar-inverse navbar-fixed-top">
+      <div class="navbar-inner">
+        <div class="container-fluid">
+          <p class="brand">The Game of War</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="container-fluid">
+      <div class="row-fluid">
+        <div class="span3">
+          <div id='main' class="well sidebar-nav">
+            <form id="GameFrm">
+                <label for="playerName" class="label">Player Name</label>
+                <input type="text" id="playerName" class="span2" name="playerName" value="" placeholder= "Enter Player Name">
+                <ul class="nav nav-list" id="gameList" name="games">
+                  <li class="nav-header">Select Games to Join</li>
+                  <li><a href="#">Link</a></li>
+                  <li><a href="#">Link</a></li>
+                  <li><a href="#">Link</a></li>
+                  <li><a href="#">Link</a></li>
+                  <li><a href="#">Link</a></li>
+                  <li><a href="#">Link</a></li>
+                </ul>
+                <input type="button" id="create" value="Create Game" class="btn">
+                <input type="button" id="join" value="Join Game" class="btn">
+                <ul class="nav nav-list" id="gameListActive" name="games">
+                  <li class="nav-header">Active Games</li>
+                  <li class="active"><a href="#">Link</a></li>
+                  <li><a href="#">Link</a></li>
+                  <li><a href="#">Link</a></li>
+                  <li><a href="#">Link</a></li>
+                </ul>
+            </form>
+          </div><!--/.well -->
+          <div id='Rules' class="well sidebar-nav">
+            <ul class="nav">
+                  <li>Enter Player Name and click Create to create a new game</li>
+                  <li>Enter Player Name, Select Game and click Join to join a game</li>
+                  <li>2-6 Players can join a game. Click Deal to start a game</li>
+                  <li>One who has the highest card win</li>
+                  <li>Game is over when a user has no cards. One with most card wins.</li>
+            </ul>
+          </div>
+        </div><!--/span-->
+
+        <div class="span9">
+          <div class="hero-unit">
+            <h1>Welcome to the Game of War</h1>
+            <p>Just the break with family and friends after a long day.Relax, Chill and Enjoy!!</p>
+          </div>
+          <div class="row-fluid" id='board'>
+            <div class="span4">
+              <form id="GameStart">
+                <label for="Game" class="label">Current Game:</label>
+                <input type="text" name="txtGame" value="" readonly class="span2">
+                <br/>
+                <input type="button" id="deal" value="Deal Game" class="btn">
+                <input type="button" id="choosen" value="Choose Card" class="btn">
+              </form>
+            </div><!--/span-->
+            <div class="span4">
+              <ul class="nav nav-list" id="playerList" name="players">
+                  <li class="nav-header">Players in Game</li>
+                  <li><a href="#">Link</a></li>
+                  <li><a href="#">Link</a></li>
+                  <li><a href="#">Link</a></li>
+                </ul>
+            </div><!--/span-->
+            <div class="span4">
+              <h2>Chat Window</h2>
+            </div><!--/span-->
+          </div><!--/row-->
+          <div class="row-fluid">
+            <div class="span4">
+              <div id="card1" data-index=0 class="card"></div>
+            </div><!--/span-->
+            <div class="span4">
+              <div id="card2" data-index=1 class="card"></div>
+            </div><!--/span-->
+            <div class="span4">
+              <div id="card3" data-index=2 class="card"></div>
+            </div><!--/span-->
+          </div><!--/row-->
+        </div><!--/span-->
+      </div><!--/row-->
+
+      <hr>
+
+      <footer>
+        <p>Code Fellows Javascript Web Socket.io Project </p>
+        <p>Games Coordinator : Justin Wheeler, Matthew Ross and Smita Busar </p>
+      </footer>
+
+    </div>
+  </body>
+</html>

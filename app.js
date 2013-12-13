@@ -10,8 +10,7 @@ var path = require("path"),
 var expressApp = express();
 expressApp.use(express.static(path.join(__dirname, 'templates')))
           .use(express.static(path.join(__dirname, 'css')))
-          .use(express.static(path.join(__dirname, 'js')))
-          .use(express.static(path.join(__dirname, 'bower_components')));
+          .use(express.static(path.join(__dirname, 'js')));
 
 expressApp.get("/", function(req, res) {
      res.redirect("playingBoard.html");

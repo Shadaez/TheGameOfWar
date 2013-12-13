@@ -1,3 +1,16 @@
+body {
+	padding-top: 60px;
+	padding-bottom: 40px;
+}
+.sidebar-nav {
+	padding: 9px 0;
+}
+.hero-unit{
+	padding :10px;
+}
+#playerName{
+	width:70%
+}
 .clsHidden {
 	display:none;
 }
@@ -11,3 +24,19 @@
 	padding:10px;
 }
 
+.card {
+	width:100px;
+	height:250px;
+	background-color: blue;
+	float:left;
+	margin-left: 20px;
+
+}
+
+.active-card {
+	background-color: red !important;
+}
+
+#submit_card {
+	float:left;
+}
