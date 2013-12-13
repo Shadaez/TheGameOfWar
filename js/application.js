@@ -4,12 +4,6 @@ var UserCards;
 $(ready);
 
 function ready() { //start jQuery
-    $("#start").on("click", function() {
-        var gameId = $("[name='txtGame']").val();
-        serverSocket.emit("create", {
-            gameId: gameId
-        });
-    });
 
     $("#create").on("click", function() {
         var player = $("[name='playerName']").val();
@@ -43,15 +37,13 @@ function ready() { //start jQuery
         }
     });
 
-    $('body').on('click', '#submit_card', function() {
-        console.log('submit');
-        var selection = $('.active-card').data('index');
+    $('#submit_card').on('click', function() {
+        var selection = $('.active-card').data('value');
         var gameID = $('#board').data('gameID');
         var cardSlice = UserCards.splice(selection, 1);
-        console.dir(cardSlice);
         var data = {
             id: gameID,
-            card: cardSlice[0]
+            card: cardSlice
         };
         serverSocket.emit("submit-card", data);
     });
@@ -91,12 +83,17 @@ serverSocket.on("switchToGame", function(game) {
     console.log("switchToGame " + game);
     $("[name='txtGame']").val(game.id);
     $('#playerList').html('');
-    updatePlayerNames(game);
+    var playerListLength = game.Players.length;
+    console.log("player length" + playerListLength)
+    for (var i = 0; i < playerListLength; i++) {
+        $('#playerList').append('<option></option>')
+        .find("option:last").text(game.Players[i].name);
+            //so that the names are escaped
+    }
     $('#main,#board').toggleClass("clsHidden");
     $('#board').data('gameID', game.id);
-});
 
-serverSocket.on("updatePlayerList", updatePlayerNames);
+});
 
 serverSocket.on("cardDecks", function(cards) {
     UserCards = cards;
@@ -104,22 +101,11 @@ serverSocket.on("cardDecks", function(cards) {
     display3Cards();
 
     $('body').append('<div id="submit_card">Submit Card!</div>');
-    $('#board').on('click', '.card', function() {
+    $('#game_board').on('click', '.card', function() {
         $('.active-card').removeClass('active-card');
         $(this).addClass('active-card');
     });
 });
-
-function updatePlayerNames(game) {
-    console.log(game);
-    var playerListLength = game.Players.length;
-    $('#playerList').html('');
-    for (var i = 0; i < playerListLength; i++) {
-        $('#playerList').append('<option></option>')
-        .find("option:last").text(game.Players[i].name);
-            //so that the names are escaped
-    }
-}
 
 function display3Cards() {
     for (var i = 0; i < 3; i++) {

@@ -1,5 +1,4 @@
 var  _ = require("underscore");
-
 var Games = {};
 
 Games.All=[];
