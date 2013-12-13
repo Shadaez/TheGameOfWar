@@ -44,16 +44,18 @@ function ready() { //start jQuery
     });
 
     $('body').on('click', '#submit_card', function() {
-        console.log('submit');
-        var selection = $('.active-card').data('index');
-        var gameID = $('#board').data('gameID');
-        var cardSlice = UserCards.splice(selection, 1);
-        console.dir(cardSlice);
-        var data = {
-            id: gameID,
-            card: cardSlice[0]
-        };
-        serverSocket.emit("submit-card", data);
+        console.log('Submit button clicked');
+        if (UserCards.openToSubmit === true) {
+            var selection = $('.active-card').data('index');
+            var gameID = $('#board').data('gameID');
+            var cardSlice = UserCards.splice(selection, 1);
+            var data = {
+                id: gameID,
+                card: cardSlice[0]
+            };
+            serverSocket.emit("submit-card", data);
+            UserCards.openToSubmit = false;
+        }
     });
 } //end jquery
 
@@ -87,6 +89,23 @@ serverSocket.on("test", function(data) {
     console.dir(data);
 });
 
+
+serverSocket.on("winner", function(data) {
+    $('#winnerbox').append("Winner!");
+    console.dir(data);
+    var numCards = data.length;
+    for (var i = 0; i < numCards; i++) {
+        UserCards.push(data[i]);
+    }
+    $('.active-card').removeClass('active-card');
+    display3Cards();
+});
+
+serverSocket.on("alertwinner", function(data) {
+    alert("The winner is " + data);
+    display3Cards();
+});
+
 serverSocket.on("switchToGame", function(game) {
     console.log("switchToGame " + game);
     $("[name='txtGame']").val(game.id);
@@ -102,11 +121,13 @@ serverSocket.on("cardDecks", function(cards) {
     UserCards = cards;
     console.dir(UserCards);
     display3Cards();
-
+    UserCards.openToSubmit = true;
     $('body').append('<div id="submit_card">Submit Card!</div>');
     $('#board').on('click', '.card', function() {
-        $('.active-card').removeClass('active-card');
-        $(this).addClass('active-card');
+        if (UserCards.openToSubmit === true) {
+            $('.active-card').removeClass('active-card');
+            $(this).addClass('active-card');
+        }
     });
 });
 
@@ -125,7 +146,7 @@ function updatePlayerNames(game) {
 
 function display3Cards() {
     for (var i = 0; i < 3; i++) {
-        $('#card' + (i +1)).append(UserCards[i].name + UserCards[i].suit);
+        $('#card' + (i +1)).html(UserCards[i].name + UserCards[i].suit);
     }
 }
 
