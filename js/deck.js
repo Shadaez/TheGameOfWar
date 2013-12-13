@@ -51,7 +51,7 @@ Deck.Deal = function (numPlayers) {
 Deck.Compare = function (cardArray) {
 	var maxCard = _.max(cardArray, function (submission) {
 		var suitValue;
-		console.log(submission.suit);
+		console.log(submission.card.suit);
 		switch (submission.suit) {
 			case "spade":
 				suitValue = .1;
@@ -66,7 +66,7 @@ Deck.Compare = function (cardArray) {
 				suitValue = .4;
 				break;
 		}
-		return (submission.value + suitValue);
+		return (submission.card.value + suitValue);
 	});
 	return maxCard;
 }

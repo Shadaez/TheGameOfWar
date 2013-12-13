@@ -107,8 +107,37 @@ serverSocket.on("cardDecks", function(cards) {
     });
 });
 
+
+//on disconnect remove player from game
+
+function updatePlayerNames(game) {
+    console.log(game);
+    var playerListLength = game.Players.length;
+    $('#playerList').html('');
+    for (var i = 0; i < playerListLength; i++) {
+        $('#playerList').append('<option></option>')
+        .find("option:last").text(game.Players[i].name);
+            //so that the names are escaped
+    }
+}
+
+
 function display3Cards() {
     for (var i = 0; i < 3; i++) {
         $('#card' + (i +1)).append(UserCards[i].name + UserCards[i].suit);
     }
+}
+
+//takes card, returns url to SVG of the card
+function getCardSVG(card){
+    var suit = card.suit.toUpperCase().slice(0,1) // first letter, capitalized
+    var folder = suit + card.suit.slice(1,card.suit.length) + 's'; //^ + rest of suit name + s
+    var name;
+    if (card.value >= 9){ //if it's a face card
+        name = card.name.slice(0,1);
+    } else {
+        var name = card.name;
+    }
+    var url = "Cards/" + folder + "/" + name + suit
+    return url;
 }
