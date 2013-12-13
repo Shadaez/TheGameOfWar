@@ -57,6 +57,7 @@ ioServer.sockets.on("connection", function(clientSocket) {
     clientSocket.on('deal', function(data){
         // var game = _.findWhere(Games.All, {id: data});
         var game = Games.Find(data);
+        game.openToJoin = false;
         var players = game.Players;
         var numplayers = game.Players.length;
         var deck = Deck.Deal(numplayers);

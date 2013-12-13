@@ -86,8 +86,7 @@ serverSocket.on("test", function(data) {
 
 
 serverSocket.on("winner", function(data) {
-    $('#winnerbox').append("Winner!");
-    console.dir(data);
+    console.log("You are the winner!");
     var numCards = data.length;
     for (var i = 0; i < numCards; i++) {
         UserCards.push(data[i]);

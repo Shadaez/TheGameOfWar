@@ -28,7 +28,7 @@ Games.Find = function(gameID) {
 Games.Join = function(gameID, player){
 	//if game is full, return false, else true
 	var game = Games.Find(gameID);
-	if(game.Players.length < Games.Max){
+	if(game.Players.length < Games.Max && game.openToJoin === true){
 		player.id=game.Players.Length+1;
 		game.Players.push(player);
 		console.log("Join" + player);
