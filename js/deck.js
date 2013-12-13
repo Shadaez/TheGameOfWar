@@ -47,7 +47,7 @@ Deck.Deal = function (numPlayers) {
 }
 
 // expects a array of objects. Each object has name of player and a card object
-//{playername: 'Name',card: {value:5,name:"2",suit:"spade"}};
+//{card: {value:5,name:"2",suit:"spade"}};
 Deck.Compare = function (cardArray) {
 	console.log('card array');
 	
