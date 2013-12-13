@@ -49,10 +49,12 @@ Deck.Deal = function (numPlayers) {
 // expects a array of objects. Each object has name of player and a card object
 //{card: {value:5,name:"2",suit:"spade"}};
 Deck.Compare = function (cardArray) {
+	console.log('card array');
+	
 	var maxCard = _.max(cardArray, function (submission) {
 		var suitValue;
 		console.log(submission.card.suit);
-		switch (submission.suit) {
+		switch (submission.card.suit) {
 			case "spade":
 				suitValue = .1;
 				break;
@@ -68,6 +70,7 @@ Deck.Compare = function (cardArray) {
 		}
 		return (submission.card.value + suitValue);
 	});
+	console.log(maxCard);
 	return maxCard;
 }
 

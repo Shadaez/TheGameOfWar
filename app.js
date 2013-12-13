@@ -51,6 +51,7 @@ ioServer.sockets.on("connection", function(clientSocket) {
     clientSocket.on('deal', function(data){
         // var game = _.findWhere(Games.All, {id: data});
         var game = Games.Find(data);
+        game.openToJoin = false;
         var players = game.Players;
         var numplayers = game.Players.length;
         var deck = Deck.Deal(numplayers);
@@ -93,15 +94,23 @@ ioServer.sockets.on("connection", function(clientSocket) {
       var game = Games.Find(data.id);
       game.CardHolder.push({socketid: clientSocket.id, card: data.card});
       var numCards = game.CardHolder.length;
-      //{socketid = player.socket, card: }
       var numplayers = game.Players.length;
       if (numCards === numplayers) {
-        var x = Deck.Compare(game.CardHolder);
+        var winningCard = Deck.Compare(game.CardHolder);
+        var returnCardsWinner = _.pluck(game.CardHolder, 'card');
+
+        // console.log(x);
+        ioServer.sockets.socket(winningCard.socketid).emit('winner', returnCardsWinner);
+        var winningplayer = _.findWhere(game.Players, {socket: winningCard.socketid});
+        pushToGame(game, 'alertwinner', winningplayer.name);
+        game.CardHolder = [];
+        console.log('card holder --------');
+        console.log(game.CardHolder);
       }
-      for (var i = 0; i < numplayers; i ++) {
-            var z = game.Players[i].socket;
-            ioServer.sockets.socket(z).emit('test', x);
-      }
+      // for (var i = 0; i < numplayers; i ++) {
+      //       var z = game.Players[i].socket;
+      //       ioServer.sockets.socket(z).emit('winner', x);
+      // }
     });
 });
 

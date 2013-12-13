@@ -27,7 +27,7 @@ Games.FindGamesByState = function(inProgress) {
 Games.Join = function(gameID, player){
 	//if game has maximum players then returns false else adds the player & returns true
 	var game = Games.Find(gameID);
-	if(game.Players.length < Games.Max){
+	if(game.Players.length < Games.Max && game.openToJoin === true){
 		game.Players.push(player);
 		return true;
 	} else {
