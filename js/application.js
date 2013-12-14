@@ -56,10 +56,16 @@ function ready() { //start jQuery
 
     $('.card').on('click', function() {
         if (UserCards.openToSubmit === true) {
-            $('.active-card').animate({'margin-top': '+=50px'}, 500);
-            $('.active-card').removeClass('active-card');
-            $(this).addClass('active-card');
-            $('.active-card').animate({'margin-top': '-=50px'}, 500);
+            //if clicked = .active-card just slide down and deactivate
+            if($(this)[0] === $('.active-card')[0]){
+                $('.active-card').animate({'margin-top': '+=50px'}, 500);
+                $('.active-card').removeClass('active-card');
+            } else {
+                $('.active-card').animate({'margin-top': '+=50px'}, 500);
+                $('.active-card').removeClass('active-card');
+                $(this).addClass('active-card');
+                $('.active-card').animate({'margin-top': '-=50px'}, 500);
+            }
         }
     });
 } //end jquery
