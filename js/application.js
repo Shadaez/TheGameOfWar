@@ -162,8 +162,8 @@ function display3Cards() {
     UserCards.openToSubmit = true;
     for (var i = 0; i < 3; i++) {
         $('#card' + (i +1) ).css('background-image', 'url(' + getCardSVG(UserCards[i]) + ')');
-        $('#numberOfCards').html('Cards Left: ' + UserCards.length);
     }
+    $('#numberOfCards').html('Cards Left: ' + UserCards.length);
 }
 
 //takes card, returns url to SVG of the card
