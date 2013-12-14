@@ -18,7 +18,6 @@ function ready() { //start jQuery
 
     $('#deal').on('click', function() {
         //todo: change deal button to submit card button
-        $(".card").slideToggle();
         var gameID = $("#board").data("gameID");
         serverSocket.emit("deal", gameID);
     });
@@ -131,6 +130,7 @@ serverSocket.on("updatePlayerList", updatePlayerNames);
 serverSocket.on("cardDecks", function(cards) {
     UserCards = cards;
     console.dir(UserCards);
+    $(".card").slideToggle();
     display3Cards();
     $('body').append('<div id="submit_card">Submit Card!</div>');
 });
@@ -156,8 +156,8 @@ function display3Cards() {
     UserCards.openToSubmit = true;
     for (var i = 0; i < 3; i++) {
         $('#card' + (i +1) ).css('background-image', 'url(' + getCardSVG(UserCards[i]) + ')');
+        $('#numberOfCards').html('Cards Left: ' + UserCards.length);
     }
-    $('#numberOfCards').html('Cards Left: ' + UserCards.length);
 }
 
 //takes card, returns url to SVG of the card
