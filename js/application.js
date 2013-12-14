@@ -95,6 +95,10 @@ serverSocket.on("test", function(data) {
     console.dir(data);
 });
 
+serverSocket.on("notEnoughPlayers", function(data) {
+    alert("There must be at least 2 players to begin a game");
+});
+
 
 serverSocket.on("winner", function(data) {
     console.log("You are the winner!");
@@ -128,7 +132,6 @@ serverSocket.on("cardDecks", function(cards) {
     UserCards = cards;
     console.dir(UserCards);
     display3Cards();
-    UserCards.openToSubmit = true;
     $('body').append('<div id="submit_card">Submit Card!</div>');
 });
 
@@ -150,9 +153,11 @@ function updatePlayerNames(game) {
 
 
 function display3Cards() {
+    UserCards.openToSubmit = true;
     for (var i = 0; i < 3; i++) {
         $('#card' + (i +1) ).css('background-image', 'url(' + getCardSVG(UserCards[i]) + ')');
     }
+    $('#numberOfCards').html('Cards Left: ' + UserCards.length);
 }
 
 //takes card, returns url to SVG of the card
