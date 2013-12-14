@@ -63,7 +63,7 @@ Games.Join = function(gameID, player){
 }
 
 Games.Start = function(gameID){
-	Games.All[gameID].openToJoin=false;
+	Games.Find(gameID).openToJoin = false;
 }
 
 //just removes game from Games.All;

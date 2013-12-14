@@ -145,11 +145,11 @@ serverSocket.on("cardDecks", function(cards) {
 //on disconnect remove player from game
 serverSocket.on("playerLeft", function(cont){
     if(cont){
-        alert("A player has left. The game will continue without them.")
+        alert("A player has left. The game will continue without them.");
     } else {
-        alert("A player has left. There are not enough players to continue. You win by default.")
+        alert("A player has left. There are not enough players to continue. You win by default.");
+        gameOver();
     }
-    gameOver();
 });
 
 //will update the player list to the player list in the passed in game
