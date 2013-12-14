@@ -50,14 +50,18 @@ ioServer.sockets.on("connection", function(clientSocket) {
     clientSocket.on('deal', function(data){
         // var game = _.findWhere(Games.All, {id: data});
         var game = Games.Find(data);
-        game.openToJoin = false;
         var players = game.Players;
         var numplayers = game.Players.length;
-        var deck = Deck.Deal(numplayers);
-      
-        for (var i = 0; i < numplayers; i ++) {
-            var z = players[i].socket;
-            ioServer.sockets.socket(z).emit("cardDecks", deck[i]);
+
+        if (numplayers > 1) {
+            var deck = Deck.Deal(numplayers);
+            game.openToJoin = false;
+            for (var i = 0; i < numplayers; i ++) {
+                var z = players[i].socket;
+                ioServer.sockets.socket(z).emit("cardDecks", deck[i]);
+            }
+        } else {
+            clientSocket.emit("notEnoughPlayers");
         }
     });
 
