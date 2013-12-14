@@ -44,7 +44,7 @@ function ready() { //start jQuery
         if (UserCards.openToSubmit === true) {
             var selection = $('.active-card').data('index');
             var gameID = $('#board').data('gameID');
-            var cardSlice = UserCards.splice(selection, 1); //is this right? should it be selection, selection+1?
+            var cardSlice = UserCards.splice(selection, 1);
             var data = {
                 id: gameID,
                 card: cardSlice[0]
@@ -143,7 +143,14 @@ serverSocket.on("cardDecks", function(cards) {
 
 
 //on disconnect remove player from game
-
+serverSocket.on("playerLeft", function(cont){
+    if(cont){
+        alert("A player has left. The game will continue without them.")
+    } else {
+        alert("A player has left. There are not enough players to continue. You win by default.")
+    }
+    gameOver();
+});
 
 //will update the player list to the player list in the passed in game
 function updatePlayerNames(game) {
@@ -174,8 +181,14 @@ function getCardSVG(card){
     if (card.value >= 9){ //if it's a face card
         name = card.name.slice(0,1);
     } else {
-        var name = card.name;
+        name = card.name;
     }
     var url = "Cards/" + folder + "/" + name + suit + ".svg"
     return url;
+}
+
+function gameOver(){
+    //move back to home page, or maybe simply refresh page?
+    //just refresh page for now
+    location.reload();
 }
