@@ -1,14 +1,34 @@
-.card {
-	width:100px;
-	height:250px;
-	background-color: blue;
-	float:left;
-	margin-left: 20px;
-
+.sidebar-nav {
+	padding: 9px 0;
+}
+.hero-unit{
+	padding :10px;
+}
+#playerName{
+	width:70%
+}
+.clsHidden {
+	display:none;
+}
+.card{
+	float: left;
+	margin-right: -150px;
+	width: 224px;
+	height: 312px;
+	box-shadow: -1px -1px 1px black;
+	border-radius: 11px;
+	display: none;
 }
 
+.card-svg {
+    width: 485px;
+    height: 683px;
+    overflow:  hidden;
+    margin-left: -260px;
+    margin-top: -370px;
+}
 .active-card {
-	background-color: red !important;
+	margin-top: -20px;
 }
 
 #submit_card {

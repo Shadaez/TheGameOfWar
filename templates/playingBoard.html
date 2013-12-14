@@ -2,14 +2,13 @@
 <html>
     <head>
         <title>The Game of War</title>
-        <link rel="stylesheet" type="text/css" href="/playingBoard.css"/>
+        <link rel="stylesheet" type="text/css" href="/main.css"/>
         <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
         <script src="//cdnjs.cloudflare.com/ajax/libs/underscore.js/1.5.2/underscore-min.js"></script>
 
         <!-- socket.io library -->
         <script src="/socket.io/socket.io.js"></script>
     </head>
-
     <body>
         <div id='main'>
             <form id="GameFrm">
@@ -28,15 +27,19 @@
             <form id="GameStart">
                 <label for="Game">Game ID</label>
                 <input type="text" name="txtGame" value="" readonly>
-                <br/>
-                <select id="playerList" name="players" size="5">
-                </select>
-                <div id="card1" data-index=0 class="card"></div>
-                <div id="card2" data-index=1 class="card"></div>
-                <div id="card3" data-index=2 class="card"></div>
                 <input type="button" id="deal" value="Deal Game">
-
+                <br/>
             </form>
+                <div id="playerList">
+
+                </div>
+                <div id="card-container">
+                    <div id="card1" data-index=0 class="card"></div>
+                    <div id="card2" data-index=1 class="card"></div>
+                    <div id="card3" data-index=2 class="card"></div>
+                    
+                </div>
+
         </div>
 
 
