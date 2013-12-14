@@ -1,12 +1,3 @@
-.sidebar-nav {
-	padding: 9px 0;
-}
-.hero-unit{
-	padding :10px;
-}
-#playerName{
-	width:70%
-}
 .clsHidden {
 	display:none;
 }
@@ -18,17 +9,16 @@
 	box-shadow: -1px -1px 1px black;
 	border-radius: 11px;
 	display: none;
+	background-position: -260px -370px;
+}
+#card-container {
+	width: 378px;
+	height: 312px;
+	padding: 10px;
+	padding-top: 50px;
 }
 
-.card-svg {
-    width: 485px;
-    height: 683px;
-    overflow:  hidden;
-    margin-left: -260px;
-    margin-top: -370px;
-}
 .active-card {
-	margin-top: -20px;
 }
 
 #submit_card {

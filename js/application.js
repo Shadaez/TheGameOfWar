@@ -17,6 +17,8 @@ function ready() { //start jQuery
     });
 
     $('#deal').on('click', function() {
+        //todo: change deal button to submit card button
+        $(".card").slideToggle();
         var gameID = $("#board").data("gameID");
         serverSocket.emit("deal", gameID);
     });
@@ -43,13 +45,22 @@ function ready() { //start jQuery
         if (UserCards.openToSubmit === true) {
             var selection = $('.active-card').data('index');
             var gameID = $('#board').data('gameID');
-            var cardSlice = UserCards.splice(selection, 1);
+            var cardSlice = UserCards.splice(selection, 1); //is this right? should it be selection, selection+1?
             var data = {
                 id: gameID,
                 card: cardSlice[0]
             };
             serverSocket.emit("submit-card", data);
             UserCards.openToSubmit = false;
+        }
+    });
+
+    $('.card').on('click', function() {
+        if (UserCards.openToSubmit === true) {
+            $('.active-card').animate({'margin-top': '+=50px'}, 500);
+            $('.active-card').removeClass('active-card');
+            $(this).addClass('active-card');
+            $('.active-card').animate({'margin-top': '-=50px'}, 500);
         }
     });
 } //end jquery
@@ -91,6 +102,7 @@ serverSocket.on("winner", function(data) {
     for (var i = 0; i < numCards; i++) {
         UserCards.push(data[i]);
     }
+    $('.active-card').animate({'margin-top': '+=50px'}, 500);
     $('.active-card').removeClass('active-card');
     display3Cards();
 });
@@ -104,7 +116,7 @@ serverSocket.on("switchToGame", function(game) {
     console.log("switchToGame " + game);
     $("[name='txtGame']").val(game.id);
     $('#playerList').html('');
-    updatePlayerNames(game);
+        updatePlayerNames(game);
     $('#main,#board').toggleClass("clsHidden");
     $('#board').data('gameID', game.id);
 
@@ -118,25 +130,20 @@ serverSocket.on("cardDecks", function(cards) {
     display3Cards();
     UserCards.openToSubmit = true;
     $('body').append('<div id="submit_card">Submit Card!</div>');
-
-    $('#board').on('click', '.card', function() {
-        if (UserCards.openToSubmit === true) {
-            $('.active-card').removeClass('active-card');
-            $(this).addClass('active-card');
-        }
-    });
 });
 
 
 //on disconnect remove player from game
 
+
+//will update the player list to the player list in the passed in game
 function updatePlayerNames(game) {
     console.log(game);
     var playerListLength = game.Players.length;
     $('#playerList').html('');
     for (var i = 0; i < playerListLength; i++) {
-        $('#playerList').append('<option></option>')
-        .find("option:last").text(game.Players[i].name);
+        $('#playerList').append('<li></li>')
+        .find("li:last").text(game.Players[i].name);
             //so that the names are escaped
     }
 }
@@ -144,7 +151,7 @@ function updatePlayerNames(game) {
 
 function display3Cards() {
     for (var i = 0; i < 3; i++) {
-        $('#card' + (i +1)).html(UserCards[i].name + UserCards[i].suit);
+        $('#card' + (i +1) ).css('background-image', 'url(' + getCardSVG(UserCards[i]) + ')');
     }
 }
 
@@ -158,6 +165,6 @@ function getCardSVG(card){
     } else {
         var name = card.name;
     }
-    var url = "Cards/" + folder + "/" + name + suit
+    var url = "Cards/" + folder + "/" + name + suit + ".svg"
     return url;
 }
