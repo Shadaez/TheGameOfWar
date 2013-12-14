@@ -104,17 +104,13 @@ serverSocket.on("switchToGame", function(game) {
     console.log("switchToGame " + game);
     $("[name='txtGame']").val(game.id);
     $('#playerList').html('');
-    var playerListLength = game.Players.length;
-    console.log("player length" + playerListLength)
-    for (var i = 0; i < playerListLength; i++) {
-        $('#playerList').append('<option></option>')
-        .find("option:last").text(game.Players[i].name);
-            //so that the names are escaped
-    }
+    updatePlayerNames(game);
     $('#main,#board').toggleClass("clsHidden");
     $('#board').data('gameID', game.id);
 
 });
+
+serverSocket.on("updatePlayerList", updatePlayerNames);
 
 serverSocket.on("cardDecks", function(cards) {
     UserCards = cards;
