@@ -23,7 +23,7 @@ function ready() { //start jQuery
     $('#deal').on('click', function() {
         var gameID = $("#txtGame").html();
         var playerListLength = parseInt($('#nPlayers').html());
-        if (playerListLength===1){
+        if (playerListLength<=1){
             alert("Need minimum 2 players to begin a game");
         }else{
             serverSocket.emit("deal", gameID);
