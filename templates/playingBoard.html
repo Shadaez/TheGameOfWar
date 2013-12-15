@@ -5,7 +5,6 @@
         <link rel="stylesheet" type="text/css" href="/main.css"/>
         <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
         <script src="//cdnjs.cloudflare.com/ajax/libs/underscore.js/1.5.2/underscore-min.js"></script>
-
         <!-- socket.io library -->
         <script src="/socket.io/socket.io.js"></script>
     </head>
@@ -24,25 +23,21 @@
             </form>
         </div>
         <div id='board' class="clsHidden">
-            <div id="numberOfCards"></div>
             <form id="GameStart">
                 <label for="Game">Game ID</label>
                 <input type="text" name="txtGame" value="" readonly>
                 <input type="button" id="deal" value="Deal Game">
                 <br/>
             </form>
-                <ul id="playerList">
-
-                </ul>
                 <div id="card-container">
                     <div id="card1" data-index=0 class="card"></div>
                     <div id="card2" data-index=1 class="card"></div>
                     <div id="card3" data-index=2 class="card"></div>
                 </div>
-
+                <div id="numberOfCards"></div>
+                <div id="submit_card">Submit Card!</div>
+                <ul id="playerList"></ul>
         </div>
-
-
         <script src="application.js"></script>
 
     </body>

@@ -96,18 +96,30 @@ ioServer.sockets.on("connection", function(clientSocket) {
     clientSocket.on("submit-card", function(data) {
       
       var game = Games.Find(data.id);
+      var player = Games.FindPlayer(game, clientSocket.id);
+      player.ready = true;
+      player.cardsLeft = data.cardsLeft;
       game.CardHolder.push({socketid: clientSocket.id, card: data.card});
       var numCards = game.CardHolder.length;
       var numplayers = game.Players.length;
+      pushToGame(game, "updatePlayerList", game)
       if (numCards === numplayers) {
         var winningCard = Deck.Compare(game.CardHolder);
         var returnCardsWinner = _.pluck(game.CardHolder, 'card');
-
         //console.log(x);
         ioServer.sockets.socket(winningCard.socketid).emit('winner', returnCardsWinner);
         var winningplayer = _.findWhere(game.Players, {socket: winningCard.socketid});
+        winningplayer.cardsLeft += numplayers;
         pushToGame(game, 'alertwinner', winningplayer.name);
+        _.each(game.CardHolder, function(card){
+            var player = Games.FindPlayer(game, card.socketid);
+            player.lastCard = card.card;
+        });
         game.CardHolder = [];
+        _.each(game.Players, function(player){
+            player.ready = false;
+        });
+        pushToGame(game, "updatePlayerList", game)
         //console.log('card holder --------');
         //console.log(game.CardHolder);
       }

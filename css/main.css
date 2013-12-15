@@ -2,25 +2,60 @@
 	display:none;
 }
 .card{
-	float: left;
+	display: inline-block;
+	position: relative;
 	margin-right: -150px;
 	width: 224px;
 	height: 312px;
 	box-shadow: -1px -1px 1px black;
 	border-radius: 11px;
-	display: none;
 	background-position: -260px -370px;
 }
 #card-container {
-	width: 378px;
-	height: 312px;
 	padding: 10px;
-	padding-top: 50px;
+	padding-top: 55px;
 }
 
 .active-card {
 }
 
 #submit_card {
-	float:left;
+}
+
+.lastCard, .cardsLeft {
+	width: 2em;
+	padding-left:.5em
+}
+.name {
+	width: 10em;
+	padding-left:.5em
+}
+.message {
+	padding-left:.5em
+}
+
+#playerList {
+	padding: 0;
+	border: 1px solid black;
+	border-radius: 5px;
+}
+
+.ready {
+	height: 1em;
+	width: 1.5em;
+}
+
+#playerList li{
+	display: block;
+	border-bottom: 1px solid black;
+	height: 1em;
+}
+
+.ready, .message, .name, .lastCard, .cardsLeft{
+	margin: 0 0 0 0;
+	height: 1em;
+	border-left: 1px solid black;
+	display: inline-block;
+	overflow: hidden;
+	text-align: center;
 }

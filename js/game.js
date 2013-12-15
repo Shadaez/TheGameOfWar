@@ -37,12 +37,17 @@ Games.FindGameByPlayerSocket = function(socket) {
 	return returnedGame;
 }
 
+//return player object
+Games.FindPlayer = function(game, socket){
+	return _.findWhere(game.Players, {socket: socket})
+}
+
 //this will remove player from player list, as well as their submitted card if they have one
 Games.RemovePlayer = function(game, socket){
 	//check if they have a submitted card
 	var indexOfPlayer = _.indexOf(game.Players, _.findWhere(game.CardHolder, {socketid: socket}))
 	if (indexOfPlayer > -1){
-		game.CardHolder.pop(indexOfPlayer);
+		game.CardHolder.splice(indexOfPlayer, 1);
 	}
 	//remove from player list
 	indexOfPlayer = _.indexOf(game.Players, _.findWhere(game.Players, {socket: socket}))
