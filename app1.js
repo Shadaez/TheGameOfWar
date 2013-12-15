@@ -73,20 +73,51 @@ ioServer.sockets.on("connection", function(clientSocket) {
     });
 
   clientSocket.on("submit-card", function(data) {
-      console.log(data);
-      var game = Games.Find(data.id);
+       var game = Games.Find(data.id);
+      var player = Games.FindPlayer(game, clientSocket.id);
+      player.ready = true;
+      player.cardsLeft = data.cardsLeft;
       game.CardHolder.push({socketid: clientSocket.id, card: data.card});
       var numCards = game.CardHolder.length;
       var numplayers = game.Players.length;
+      pushToGame(game, "updatePlayerList", game)
       if (numCards === numplayers) {
         var winningCard = Deck.Compare(game.CardHolder);
         var returnCardsWinner = _.pluck(game.CardHolder, 'card');
-
+        //console.log(x);
         ioServer.sockets.socket(winningCard.socketid).emit('winner', returnCardsWinner);
         var winningplayer = _.findWhere(game.Players, {socket: winningCard.socketid});
+        winningplayer.cardsLeft += numplayers;
         pushToGame(game, 'alertwinner', winningplayer.name);
+        _.each(game.CardHolder, function(card){
+            var player = Games.FindPlayer(game, card.socketid);
+            player.lastCard = card.card;
+        });
         game.CardHolder = [];
+        _.each(game.Players, function(player){
+            player.ready = false;
+        });
+        pushToGame(game, "updatePlayerList", game)
       }
+    });
+
+  clientSocket.on("disconnect", function(){
+        //1 tell players in game someone left, update playerlist
+        var game = Games.FindGameByPlayerSocket(clientSocket.id);
+        console.log(clientSocket.id);
+        if(game){
+             Games.RemovePlayer(game, clientSocket.id);
+            //2 check if game has enough players to continue
+            if (game.Players.length > 1){
+                //continue with the game, the player who left's cards are just thrown out
+                pushToGame(game, "playerLeft", true);
+                pushToGame(game, "updatePlayerList", game);
+            } else {
+                //if not, alert remaining person that they won the game
+                pushToGame(game, "playerLeft", false);
+                gameOver(game);
+            }
+        }
     });
 });
 
