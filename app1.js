@@ -59,11 +59,9 @@ ioServer.sockets.on("connection", function(clientSocket) {
         }
     });
 
-  clientSocket.on('deal', function(data){
-        console.log(data);
-        var game = Games.Find(data);
+  clientSocket.on('deal', function(gamesID){
+        var game = Games.Find(gamesID);
         game.openToJoin = false;
-        console.log(Games.Find(data));
         var players = game.Players;
         var numplayers = game.Players.length;
         var deck = Deck.Deal(numplayers);
