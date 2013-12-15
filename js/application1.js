@@ -1,6 +1,6 @@
 var serverSocket = io.connect("http://localhost");
 var UserCards;
-
+var Hand = [];
 $(ready);
 
 function ready() { //start jQuery
@@ -98,7 +98,8 @@ function display3Cards() {
     UserCards.openToSubmit = true;
     for (var i = 0; i < 3; i++) {
         Hand.push(UserCards.pop());
-        $('#card' + (i +1) ).css('background-image', 'url(' + Hand.url + ')');
+        console.log(Hand);
+        $('#card' + (i +1) ).css('background-image', 'url(' + Hand[i].url + ')');
     }
     $('#numberOfCards').html('Cards Left: ' + UserCards.length);
 }
@@ -119,8 +120,20 @@ function updatePlayerNames(game) {
     $('#nPlayers').html(playerListLength);
     $('#playerList').append('<li class="nav-header">Players in Game</li>');
     for (var i = 0; i < playerListLength; i++) {
-        $('#playerList').append('<li></li>')
-        .find("li:last").text(game.Players[i].name);//so that the names are escaped
+       // $('#playerList').append('<li></li>')
+        //.find("li:last").text(game.Players[i].name);//so that the names are escaped
+        var checked = ''
+        if(game.Players[i].ready){
+            checked = "checked = 'checked'"
+        }
+        $('#playerList').append('<li><input class="ready" type="checkbox" '+ checked +' disabled = "disabled" ></input><div class = "lastCard"></div><div class = "cardsLeft"></div><div class="name"></div><div class="message"></div></li>')
+        .find("li:last").find('.name').text(game.Players[i].name);
+        if(game.Players[i].lastCard){
+            $('#playerList').find("li:last").find('.lastCard').text(getCardShort(game.Players[i].lastCard));
+        }
+        if(game.Players[i].cardsLeft){
+            $('#playerList').find("li:last").find('.cardsLeft').text(game.Players[i].cardsLeft);
+        }
     }
 }
 

@@ -62,6 +62,7 @@ ioServer.sockets.on("connection", function(clientSocket) {
         console.log(data);
         var game = Games.Find(data);
         game.openToJoin = false;
+        console.log(Games.Find(data));
         var players = game.Players;
         var numplayers = game.Players.length;
         var deck = Deck.Deal(numplayers);
@@ -73,7 +74,7 @@ ioServer.sockets.on("connection", function(clientSocket) {
     });
 
   clientSocket.on("submit-card", function(data) {
-       var game = Games.Find(data.id);
+      var game = Games.Find(data.id);
       var player = Games.FindPlayer(game, clientSocket.id);
       player.ready = true;
       player.cardsLeft = data.cardsLeft;
