@@ -9,28 +9,26 @@ body {
 	padding :10px;
 }
 #playerName{
-	width:70%
+	width:60%;
+	margin-left:5px;
+	margin-top:7px;
 }
-.clsHidden {
-	display:none;
+#gameListJoin input{
+	margin-left:10px;
+}
+#txtGame, #nCards, #nPlayers{
+	background-color: #428bca;
+	font-size:1em;
+	line-height:1em;
 }
 .card {
-	width :100px;
-	height:150px;
+	width :150px;
+	height:250px;
 	border-radius:2em;
 	border:1px solid black;
-	box-shadow:0 0 15px 2px #abcdef;
-	margin:10px;
-	padding:10px;
-}
-
-.card {
-	width:100px;
-	height:250px;
 	background-color: blue;
-	float:left;
-	margin-left: 20px;
-
+	color:white;
+	box-shadow:0 0 15px 2px #abcdef;
 }
 
 .active-card {

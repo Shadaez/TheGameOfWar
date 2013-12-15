@@ -19,11 +19,6 @@ Games.Find = function(gameID) {
 	return _.findWhere(Games.All, {id: parseInt(gameID)});
 }
 
-//returns all games which is yet to be joined if true or games started if inProgress is false
-Games.FindGamesByState = function(inProgress) {
-	return _.where(Games.All, {openToJoin: inProgress});
-}
-
 Games.Join = function(gameID, player){
 	//if game has maximum players then returns false else adds the player & returns true
 	var game = Games.Find(gameID);
@@ -33,10 +28,6 @@ Games.Join = function(gameID, player){
 	} else {
 		return false;
 	}
-}
-
-Games.Start = function(gameID){
-	Games.All[gameID].openToJoin=false;
 }
 
 module.exports = Games;

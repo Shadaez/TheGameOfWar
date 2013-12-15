@@ -10,9 +10,7 @@ function ready() { //start jQuery
         if (player.length <= 0) {
             alert("Please insert a name")
         } else {
-            serverSocket.emit("create", {
-                playerName: player
-            });
+            serverSocket.emit("create", {playerName: player});
         }
     });
 
