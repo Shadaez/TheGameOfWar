@@ -162,7 +162,7 @@ function updatePlayerNames(game) {
         if(game.Players[i].ready){
             checked = "checked = 'checked'"
         }
-        $('#playerList').append('<li><input class="ready" type="checkbox" '+ checked +' disabled = "disabled" ></input><div class = "lastCard"></div><div class = "cardsLeft"></div><div class="name"></div><div class="message"></div></li>')
+        $('#playerList').append('<li id="'+ game.Players[i].name +'"><input class="ready" type="checkbox" '+ checked +' disabled = "disabled" ></input><div class = "lastCard"></div><div class = "cardsLeft"></div><div class="name"></div><div class="message"></div></li>')
         .find("li:last").find('.name').text(game.Players[i].name);
         if(game.Players[i].lastCard){
             $('#playerList').find("li:last").find('.lastCard').text(getCardShort(game.Players[i].lastCard));
