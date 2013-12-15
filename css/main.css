@@ -1,16 +1,61 @@
-.card {
-	width:100px;
-	height:250px;
-	background-color: blue;
-	float:left;
-	margin-left: 20px;
-
+.clsHidden {
+	display:none;
+}
+.card{
+	display: inline-block;
+	position: relative;
+	margin-right: -150px;
+	width: 224px;
+	height: 312px;
+	box-shadow: -1px -1px 1px black;
+	border-radius: 11px;
+	background-position: -260px -370px;
+}
+#card-container {
+	padding: 10px;
+	padding-top: 55px;
 }
 
 .active-card {
-	background-color: red !important;
 }
 
 #submit_card {
-	float:left;
+}
+
+.lastCard, .cardsLeft {
+	width: 2em;
+	padding-left:.5em
+}
+.name {
+	width: 10em;
+	padding-left:.5em
+}
+.message {
+	padding-left:.5em
+}
+
+#playerList {
+	padding: 0;
+	border: 1px solid black;
+	border-radius: 5px;
+}
+
+.ready {
+	height: 1em;
+	width: 1.5em;
+}
+
+#playerList li{
+	display: block;
+	border-bottom: 1px solid black;
+	height: 1em;
+}
+
+.ready, .message, .name, .lastCard, .cardsLeft{
+	margin: 0 0 0 0;
+	height: 1em;
+	border-left: 1px solid black;
+	display: inline-block;
+	overflow: hidden;
+	text-align: center;
 }
