@@ -13,8 +13,9 @@ body {
 	margin-left:5px;
 	margin-top:7px;
 }
-#gameListJoin input{
-	margin-left:10px;
+#gameListJoin input,#gameListInProgress input{
+	margin:5px;
+	margin-left:40px;
 }
 #txtGame, #nCards, #nPlayers{
 	background-color: #428bca;

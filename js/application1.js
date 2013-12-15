@@ -70,7 +70,7 @@ serverSocket.on("updateGameList", function(gameList) {
             $('#gameListJoin').append('<input type="button" id="' + id +'" value="'+ gameList[i].id + '" class="btn"/>');         
             $("#" +id).on("click",joinEventHandler);
         }else{
-            $('#gameListInProgress').append('<span class="btn" name="Active' + gameList[i].id  +'">' + gameList[i].id + '</span>');
+            $('#gameListInProgress').append('<input type="button" id=active"' + gameList[i].id +'" value="'+ gameList[i].id + '" class="btn"/>');
         }
     }
 });
