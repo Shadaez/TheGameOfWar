@@ -10,7 +10,8 @@ var path = require("path"),
 var expressApp = express();
 expressApp.use(express.static(path.join(__dirname, 'templates')))
           .use(express.static(path.join(__dirname, 'css')))
-          .use(express.static(path.join(__dirname, 'js')));
+          .use(express.static(path.join(__dirname, 'js')))
+          .use(express.static(path.join(__dirname, 'images')));
 
 expressApp.get("/", function(req, res) {
      res.redirect("playingBoard1.html");
@@ -102,24 +103,7 @@ ioServer.sockets.on("connection", function(clientSocket) {
       }
     });
 
-  clientSocket.on("disconnect", function(){
-        //1 tell players in game someone left, update playerlist
-        var game = Games.FindGameByPlayerSocket(clientSocket.id);
-        console.log(clientSocket.id);
-        if(game){
-             Games.RemovePlayer(game, clientSocket.id);
-            //2 check if game has enough players to continue
-            if (game.Players.length > 1){
-                //continue with the game, the player who left's cards are just thrown out
-                pushToGame(game, "playerLeft", true);
-                pushToGame(game, "updatePlayerList", game);
-            } else {
-                //if not, alert remaining person that they won the game
-                pushToGame(game, "playerLeft", false);
-                gameOver(game);
-            }
-        }
-    });
+  
 });
 
 httpServer.listen(3000);

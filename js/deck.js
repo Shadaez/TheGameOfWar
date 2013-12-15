@@ -10,7 +10,7 @@ function getCardSVG(card){
     } else {
         var name = card.name;
     }
-    var url = "Cards/" + folder + "/" + name + suit
+    var url = "Cards/" + folder + "/" + name + suit + ".svg"
     return url;
 }
 
