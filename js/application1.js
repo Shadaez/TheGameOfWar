@@ -1,12 +1,12 @@
 var serverSocket = io.connect("http://localhost");
 var UserCards;
-
+var Hand = [];
 $(ready);
 
 function ready() { //start jQuery
     function intializePage(){
         //hides all the elements.
-        $("#startGame,#gameDetails,#board").hide();
+        $("#startGame,#chat,#board").hide();
     }
 
     intializePage();
@@ -30,6 +30,23 @@ function ready() { //start jQuery
         }
     });  
 
+    $('.card').on('click', function() {
+        if (UserCards.openToSubmit === true) {
+            //if clicked = .active-card just slide down and deactivate
+            if($(this)[0] === $('.active-card')[0]){
+                $('.active-card').animate({'top': '+=50px'}, 500);
+                $('.active-card').removeClass('active-card');
+            } else {
+                $('.active-card').animate({'top': '+=50px'}, 500);
+                $('.active-card').removeClass('active-card');
+                $(this).addClass('active-card');
+                $('.active-card').animate({'top': '-=50px'}, 500);
+            }
+        }
+    });
+
+    $('.card').slideToggle();
+
    
 } //end jquery
 
@@ -44,8 +61,6 @@ function joinEventHandler(){
     }
 }
 
-
-
 function updatePlayerNames(game) {
     $('#playerList').html('');
     var playerListLength = game.Players.length;
@@ -57,6 +72,16 @@ function updatePlayerNames(game) {
         
     }
 }
+
+function display3Cards() {
+    UserCards.openToSubmit = true;
+    for (var i = 0; i < 3; i++) {
+        Hand.push(UserCards.pop());
+        $('#card' + (i +1) ).css('background-image', 'url(' + Hand[i].url + ')');
+    }
+    $("#nCards").html(UserCards.length);
+}
+
 
 serverSocket.on("updateGameList", function(gameList) {
     $('#gameListJoin').html('').append("<h5>Games to Join</h5>");
@@ -84,25 +109,26 @@ serverSocket.on("switchToGame", function(game) {
     console.log(game);
     $("#txtGame").html(game.id);
     updatePlayerNames(game);
-    $("#startGame,#gameDetails,#board,#createJoinGame,#welcome").toggle();
-    //$('#board').data('gameID', game.id);
+    $("#startGame,#chat,#board,#createJoinGame,#welcome").toggle();
 });
 
 serverSocket.on("cardDecks", function(cards) {
     UserCards = cards;
     console.dir(UserCards);
     $("#nCards").html(UserCards.length);
+    //$(".card").slideToggle();
     display3Cards();
-    UserCards.openToSubmit = true;
     $("#PlayFrm p").toggle();
-    //$('body').append('<div id="submit_card">Submit Card!</div>');
+    // UserCards.openToSubmit = true;
+    // 
+    // //$('body').append('<div id="submit_card">Submit Card!</div>');
 
-    $('#board').on('click', '.card', function() {
-        if (UserCards.openToSubmit === true) {
-            $('.active-card').removeClass('active-card');
-            $(this).addClass('active-card');
-        }
-    });
+    // $('#board').on('click', '.card', function() {
+    //     if (UserCards.openToSubmit === true) {
+    //         $('.active-card').removeClass('active-card');
+    //         $(this).addClass('active-card');
+    //     }
+    // });
 });
 
 serverSocket.on("winner", function(data) {

@@ -32,6 +32,7 @@ function pushToGame(game, eventname, data){
 }
 
 function dealEventHandler(gamesID){
+    console.log("dealEventHandler Called" + gamesID);
     var game = Games.Find(gamesID);
     game.openToJoin = false;
     var players = game.Players;
@@ -40,8 +41,8 @@ function dealEventHandler(gamesID){
     for (var i = 0; i < numplayers; i++) {
         var playerSocket = players[i].socket;
         ioServer.sockets.socket(playerSocket).emit("cardDecks", deck[i]);
-    }
-    clientSocket.broadcast.emit("updateGameList", Games.All);
+    } 
+    console.log("dealEventHandler Called");
 }
 
 ioServer.sockets.on("connection", function(clientSocket) {
@@ -66,9 +67,10 @@ ioServer.sockets.on("connection", function(clientSocket) {
           var game=Games.Find(data.gameID);
           clientSocket.emit("switchToGame",game);
           pushToGame(game, "updatePlayerList", game);
-          if(game.Players.length>Deck.Max){
+          if(game.Players.length>=Deck.Max){
             console.log("deal called when limit reached 6");
             dealEventHandler(game.id);
+            clientSocket.broadcast.emit("updateGameList", Games.All);
           }
         } else {
           //if they failed, their game list needs refreshing
@@ -76,7 +78,10 @@ ioServer.sockets.on("connection", function(clientSocket) {
         }
     });
 
-  clientSocket.on('deal', dealEventHandler);
+  clientSocket.on('deal', function(gameID){
+      dealEventHandler(gameID);
+      clientSocket.broadcast.emit("updateGameList", Games.All);
+  });
 
   clientSocket.on("submit-card", function(data) {
       var game = Games.Find(data.id);
