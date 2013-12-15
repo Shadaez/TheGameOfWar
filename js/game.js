@@ -19,11 +19,6 @@ Games.Find = function(gameID) {
 	return _.findWhere(Games.All, {id: parseInt(gameID)});
 }
 
-//returns all games which is yet to be joined if true or games started if inProgress is false
-Games.FindGamesByState = function(inProgress) {
-	return _.where(Games.All, {openToJoin: inProgress});
-}
-
 //let me know if you can think of a better way to do this
 //returns the game that contains the player w/ the socketID
 Games.FindGameByPlayerSocket = function(socket) {
@@ -65,10 +60,6 @@ Games.Join = function(gameID, player){
 	} else {
 		return false;
 	}
-}
-
-Games.Start = function(gameID){
-	Games.Find(gameID).openToJoin = false;
 }
 
 //just removes game from Games.All;

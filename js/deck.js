@@ -1,6 +1,19 @@
 var _ = require("underscore");
 var Deck = {};
 
+function getCardSVG(card){
+    var suit = card.suit.toUpperCase().slice(0,1) // first letter, capitalized
+    var folder = suit + card.suit.slice(1,card.suit.length) + 's'; //^ + rest of suit name + s
+    var name;
+    if (card.value >= 9){ //if it's a face card
+        name = card.name.slice(0,1);
+    } else {
+        var name = card.name;
+    }
+    var url = "Cards/" + folder + "/" + name + suit
+    return url;
+}
+
 Deck.Cards = function () { 
 	var cards=[];
 	var cardName=["Jack","Queen","King","Ace"]
@@ -15,6 +28,7 @@ Deck.Cards = function () {
 				tmp.name= cardName[i%9];
 			}
 			tmp.suit=suits[j];
+			tmp.url=getCardSVG(tmp);
 			cards.push(tmp);
 		}
 	}
