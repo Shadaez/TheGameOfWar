@@ -42,6 +42,12 @@
                 
             </form>
           </div><!--/.well -->
+          <div id="chat" class="well sidebar-nav">
+                <h1>chat window</h1>
+                <textarea id="txtChat" rows="10" cols="20" readonly></textarea><br/>
+                <input type="text" id="txtMessage" class="span2" value="" placeholder= "Enter text" required>
+                <input type="button" id="sendMessage" value="Send" class="btn"/>
+              </div>  
           <div id='rules' class="well sidebar-nav">
             <ul class="nav">
                   <li>Enter Player Name and click Create to create a new game</li>
@@ -70,12 +76,7 @@
             <div class="span4">
               <ul class="nav nav-list" id="playerList">
               </ul> 
-              <div id="chat">
-                <h1>chat window</h1>
-                <textarea id="txtChat" rows="10" cols="20" readonly></textarea><br/>
-                <input type="text" id="txtMessage" class="span2" value="" placeholder= "Enter text" required>
-                <input type="button" id="sendMessage" value="Send" class="btn"/>
-              </div>             
+                         
             </div><!--/span-->
             <div class="span8">
               <div id="card-container">
