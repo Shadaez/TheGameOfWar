@@ -1,1 +1,1 @@
-web:node app1
+web:node app
