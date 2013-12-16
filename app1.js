@@ -99,7 +99,7 @@ ioServer.sockets.on("connection", function(clientSocket) {
       game.CardHolder.push({socketid: clientSocket.id, card: data.card});
       var numCards = game.CardHolder.length;
       var numplayers = game.Players.length;
-      pushToGame(game, "updatePlayerList", game)
+      //pushToGame(game, "updatePlayerList", game)
       if (numCards === numplayers) {
         var winningCard = Deck.Compare(game.CardHolder);
         var returnCardsWinner = _.pluck(game.CardHolder, 'card');
