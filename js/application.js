@@ -15,7 +15,7 @@ function ready() { //start jQuery
     });
 
     $('#deal').on('click', function() {
-        //todo: change deal button to submit card button
+        //change deal button to submit card button
         var gameID = $("#board").data("gameID");
         serverSocket.emit("deal", gameID);
     });
@@ -47,7 +47,9 @@ function ready() { //start jQuery
                 card: Hand[selection],
                 cardsLeft: UserCards.length
             };
-            serverSocket.emit("submit-card", data);
+            $('.active-card').animate({'top': '-=5000px'}, 500, function(){
+                serverSocket.emit("submit-card", data);
+            });
             UserCards.openToSubmit = false;
         }
     });
@@ -66,7 +68,6 @@ function ready() { //start jQuery
             }
         }
     });
-
     $('.card').slideToggle();
 } //end jquery
 
@@ -114,17 +115,18 @@ serverSocket.on("winner", function(data) {
 });
 
 serverSocket.on("alertwinner", function(data) {
-    alert("The winner is " + data);
+    alert("The winner is " + data); //lets highlight the player in list
     drawACard();
     //display3Cards(); //we need to only draw 1 more card and replace the .active-card div with it
 });
 
 serverSocket.on("switchToGame", function(game) {
     console.log("switchToGame " + game);
+    $("[name='txtName']").val($("[name='playerName']").val())
     $("[name='txtGame']").val(game.id);
     $('#playerList').html('');
         updatePlayerNames(game);
-    $('#main,#board').toggleClass("clsHidden");
+    $('#GameFrm, #gameHeader, #board, #rules').slideToggle();
     $('#board').data('gameID', game.id);
 
 });
@@ -133,11 +135,13 @@ serverSocket.on("updatePlayerList", updatePlayerNames);
 
 serverSocket.on("cardDecks", function(cards) {
     UserCards = cards;
-    console.dir(UserCards);
-    $(".card").slideToggle();
+    $('#deal').slideToggle('200', function(){$("#submit_card").slideToggle('200')});
+    //console.dir(UserCards);
     display3Cards();
+    // $('#deal').addClass('clsHidden');
+    // $('#submit_card').removeClass('clsHidden');
     //$('body').append('<div id="submit_card">Submit Card!</div>');
-    $('#submit_card')
+    //$('#submit_card')
 });
 
 
@@ -176,19 +180,31 @@ function display3Cards() {
     UserCards.openToSubmit = true;
     for (var i = 0; i < 3; i++) {
         Hand.push(UserCards.pop());
-        $('#card' + (i +1) ).css('background-image', 'url(' + getCardSVG(Hand[i]) + ')');
     }
+    //pretty way to display cards:
+    var cards = $('.card');
+    $(cards[0]).css('background-image', 'url(' + getCardSVG(Hand[0]) + ')').slideToggle('400', function(){
+        $(cards[1]).css('background-image', 'url(' + getCardSVG(Hand[1]) + ')').slideToggle('400', function(){
+                $(cards[2]).css('background-image', 'url(' + getCardSVG(Hand[2]) + ')').slideToggle();
+        });
+    });
+            
     $('#numberOfCards').html('Cards Left: ' + UserCards.length);
 }
 
 function drawACard() {
     UserCards.openToSubmit = true;
     var selection = $('.active-card').data('index');
-    var newcard = UserCards.pop();
-    Hand[selection] = newcard;
-    $('.active-card').css('background-image', 'url(' + getCardSVG(Hand[selection]) + ')')
-    $('.active-card').animate({'top': '+=50px'}, 500);
+    $('.active-card').animate({'top': '+=5050px'}, 500);
+    if (UserCards.length >= 1){    
+        var newcard = UserCards.pop();
+        Hand[selection] = newcard;
+        $('.active-card').css('background-image', 'url(' + getCardSVG(Hand[selection]) + ')').slideDown();
+    } else {
+        Hand[selection] = null;
+    }
     $('.active-card').removeClass('active-card');
+    //slide card down, card.data.set 3
 }
 
 //takes card, returns url to SVG of the card
@@ -205,6 +221,8 @@ function getCardSVG(card){
     return url;
 }
 
+
+//returns shorthand for card, such as "K♥" for king of hearts
 function getCardShort(card){
     var suit = card.suit.toUpperCase().slice(0,1)
     var name;

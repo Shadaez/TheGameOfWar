@@ -9,34 +9,44 @@
         <script src="/socket.io/socket.io.js"></script>
     </head>
     <body>
-        <div id='main'>
+        <div id='header'>
+            <div id="gameHeader" class="clsHidden">
+                <div id="playerName"></div>
+                <form>
+                    <label form="txtName">Name</label>
+                    <input disabled type="text" name="txtName" value="">
+                    <label form="txtName">Game</label>
+                    <input disabled type="text" name="txtGame" value="">
+                    <input type="button" id="deal" value="Deal Cards">
+                    <input type="button" id="submit_card" class = "clsHidden" value="Submit Card">
+                </form>
+            </div>
             <form id="GameFrm">
-                <label for="playerName">Player Name</label>
+                <label form="playerName">Name</label>
                 <input type="text" name="playerName" value="" placeholder= "Enter Player Name">
-                <br/>
                 <input type="button" id="create" value="Create Game">
-                <br/>
-                <select id="gameList" name="games" size="5">
+                <label form="games">Games:</label>
+                <select id="gameList" name="games" size=>
                 </select>
                 <input type="button" id="join" value="Join Game">
-                
             </form>
         </div>
-        <div id='board' class="clsHidden">
-            <form id="GameStart">
-                <label for="Game">Game ID</label>
-                <input type="text" name="txtGame" value="" readonly>
-                <input type="button" id="deal" value="Deal Game">
-                <br/>
-            </form>
+        <div id='main'>
+            <div id='board'>
                 <div id="card-container">
-                    <div id="card1" data-index=0 class="card"></div>
-                    <div id="card2" data-index=1 class="card"></div>
-                    <div id="card3" data-index=2 class="card"></div>
+                    <div data-index=0 class="card"></div>
+                    <div data-index=1 class="card"></div>
+                    <div data-index=2 class="card"></div>
+                    <div style="height:312px; width:1px;display:inline-block"></div>
                 </div>
-                <div id="numberOfCards"></div>
-                <div id="submit_card">Submit Card!</div>
                 <ul id="playerList"></ul>
+            </div>
+            <div id="rules">
+                <h1>
+                    Rules:
+                </h1>
+                <p>stuff</p>
+            </div>
         </div>
         <script src="application.js"></script>
 
