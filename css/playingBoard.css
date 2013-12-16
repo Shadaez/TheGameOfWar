@@ -13,25 +13,63 @@ body {
 	margin-left:5px;
 	margin-top:7px;
 }
-#gameListJoin input{
-	margin-left:10px;
+#gameListJoin input,#gameListInProgress input{
+	margin:5px;
+	margin-left:40px;
 }
 #txtGame, #nCards, #nPlayers{
 	background-color: #428bca;
 	font-size:1em;
 	line-height:1em;
 }
-.card {
-	width :150px;
-	height:250px;
-	border-radius:2em;
-	border:1px solid black;
-	background-color: blue;
-	color:white;
-	box-shadow:0 0 15px 2px #abcdef;
+
+.card{
+	display: inline-block;
+	position: relative;
+	margin-right: -150px;
+	width: 224px;
+	height: 312px;
+	box-shadow: -1px -1px 1px black;
+	border-radius: 11px;
+	background-position: -260px -370px;
+}
+
+#card-container {
+	padding: 10px;
+	padding-top: 55px;
 }
 
 .active-card {
-	background-color: red !important;
+}
+
+.lastCard, .cardsLeft {
+	width: 2em;
+	padding-left:.5em
+}
+
+#playerList {
+	padding: 0;
+	border: 1px solid black;
+	border-radius: 5px;
+}
+
+.ready {
+	height: 1em;
+	width: 1.5em;
+}
+
+#playerList li{
+	display: block;
+	border-bottom: 1px solid black;
+	height: 1em;
+}
+
+.ready, .lastCard, .cardsLeft{
+	margin: 0 0 0 0;
+	height: 1em;
+	border-left: 1px solid black;
+	display: inline-block;
+	overflow: hidden;
+	text-align: center;
 }
 

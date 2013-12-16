@@ -6,7 +6,7 @@ $(ready);
 function ready() { //start jQuery
     function intializePage(){
         //hides all the elements.
-        $("#startGame,#gameDetails,#board").hide();
+        $("#startGame,#chat,#board").hide();
     }
 
     intializePage();
@@ -23,28 +23,12 @@ function ready() { //start jQuery
     $('#deal').on('click', function() {
         var gameID = $("#txtGame").html();
         var playerListLength = parseInt($('#nPlayers').html());
-        if (playerListLength===1){
+        if (playerListLength<=1){
             alert("Need minimum 2 players to begin a game");
         }else{
             serverSocket.emit("deal", gameID);
         }
     });  
-
-    $('#choosen').on('click', function() {
-        alert("chossed");
-        if (UserCards.openToSubmit === true) {
-            var selection = $('.active-card').data('index');
-            var gameID = $("#txtGame").html();
-            var cardSlice = UserCards.splice(selection, 1);
-            var data = {
-                id: gameID,
-                card: Hand[selection],
-                cardsLeft: UserCards.length
-            };
-            serverSocket.emit("submit-card", data);
-            UserCards.openToSubmit = false;
-        }
-    });
 
     $('.card').on('click', function() {
         if (UserCards.openToSubmit === true) {
@@ -62,7 +46,8 @@ function ready() { //start jQuery
     });
 
     $('.card').slideToggle();
-    
+
+   
 } //end jquery
 
 //************Handling Socket events*********************
@@ -76,66 +61,27 @@ function joinEventHandler(){
     }
 }
 
-function getCardShort(card){
-    var suit = card.suit.toUpperCase().slice(0,1)
-    var name;
-    var symbols = {
-        H: "♥",
-        S: "♠",
-        C: "♣",
-        D: "♦"
-    }
-    if (card.value >= 9){ //if it's a face card
-        name = card.name.slice(0,1);
-    } else {
-        name = card.name;
-    }
-
-    return name + symbols[suit]
-}
-
-function display3Cards() {
-    UserCards.openToSubmit = true;
-    for (var i = 0; i < 3; i++) {
-        Hand.push(UserCards.pop());
-        console.log(Hand);
-        $('#card' + (i +1) ).css('background-image', 'url(' + Hand[i].url + ')');
-    }
-    $('#numberOfCards').html('Cards Left: ' + UserCards.length);
-}
-
-function drawACard() {
-    UserCards.openToSubmit = true;
-    var selection = $('.active-card').data('index');
-    var newcard = UserCards.pop();
-    Hand[selection] = newcard;
-    $('.active-card').css('background-image', 'url(' + Hand[selection].url + ')')
-    $('.active-card').animate({'top': '+=50px'}, 500);
-    $('.active-card').removeClass('active-card');
-}
-
 function updatePlayerNames(game) {
     $('#playerList').html('');
     var playerListLength = game.Players.length;
     $('#nPlayers').html(playerListLength);
     $('#playerList').append('<li class="nav-header">Players in Game</li>');
     for (var i = 0; i < playerListLength; i++) {
-       // $('#playerList').append('<li></li>')
-        //.find("li:last").text(game.Players[i].name);//so that the names are escaped
-        var checked = ''
-        if(game.Players[i].ready){
-            checked = "checked = 'checked'"
-        }
-        $('#playerList').append('<li><input class="ready" type="checkbox" '+ checked +' disabled = "disabled" ></input><div class = "lastCard"></div><div class = "cardsLeft"></div><div class="name"></div><div class="message"></div></li>')
-        .find("li:last").find('.name').text(game.Players[i].name);
-        if(game.Players[i].lastCard){
-            $('#playerList').find("li:last").find('.lastCard').text(getCardShort(game.Players[i].lastCard));
-        }
-        if(game.Players[i].cardsLeft){
-            $('#playerList').find("li:last").find('.cardsLeft').text(game.Players[i].cardsLeft);
-        }
+       $('#playerList').append('<li></li>')
+        .find("li:last").text(game.Players[i].name);//so that the names are escaped
+        
     }
 }
+
+function display3Cards() {
+    UserCards.openToSubmit = true;
+    for (var i = 0; i < 3; i++) {
+        Hand.push(UserCards.pop());
+        $('#card' + (i +1) ).css('background-image', 'url(' + Hand[i].url + ')');
+    }
+    $("#nCards").html(UserCards.length);
+}
+
 
 serverSocket.on("updateGameList", function(gameList) {
     $('#gameListJoin').html('').append("<h5>Games to Join</h5>");
@@ -149,7 +95,7 @@ serverSocket.on("updateGameList", function(gameList) {
             $('#gameListJoin').append('<input type="button" id="' + id +'" value="'+ gameList[i].id + '" class="btn"/>');         
             $("#" +id).on("click",joinEventHandler);
         }else{
-            $('#gameListInProgress').append('<span class="btn" name="Active' + gameList[i].id  +'">' + gameList[i].id + '</span>');
+            $('#gameListInProgress').append('<input type="button" id=active"' + gameList[i].id +'" value="'+ gameList[i].id + '" class="btn"/>');
         }
     }
 });
@@ -163,25 +109,26 @@ serverSocket.on("switchToGame", function(game) {
     console.log(game);
     $("#txtGame").html(game.id);
     updatePlayerNames(game);
-    $("#startGame,#gameDetails,#board,#createJoinGame,#welcome").toggle();
-    //$('#board').data('gameID', game.id);
+    $("#startGame,#chat,#board,#createJoinGame,#welcome").toggle();
 });
 
 serverSocket.on("cardDecks", function(cards) {
     UserCards = cards;
     console.dir(UserCards);
     $("#nCards").html(UserCards.length);
+    //$(".card").slideToggle();
     display3Cards();
-    UserCards.openToSubmit = true;
     $("#PlayFrm p").toggle();
-    //$('body').append('<div id="submit_card">Submit Card!</div>');
+    // UserCards.openToSubmit = true;
+    // 
+    // //$('body').append('<div id="submit_card">Submit Card!</div>');
 
-    $('#board').on('click', '.card', function() {
-        if (UserCards.openToSubmit === true) {
-            $('.active-card').removeClass('active-card');
-            $(this).addClass('active-card');
-        }
-    });
+    // $('#board').on('click', '.card', function() {
+    //     if (UserCards.openToSubmit === true) {
+    //         $('.active-card').removeClass('active-card');
+    //         $(this).addClass('active-card');
+    //     }
+    // });
 });
 
 serverSocket.on("winner", function(data) {
@@ -198,12 +145,4 @@ serverSocket.on("alertwinner", function(data) {
     //display3Cards(); //we need to only draw 1 more card and replace the .active-card div with it
 });
 
-//on disconnect remove player from game
-serverSocket.on("playerLeft", function(cont){
-    if(cont){
-        alert("A player has left. The game will continue without them.");
-    } else {
-        alert("A player has left. There are not enough players to continue. You win by default.");
-        gameOver();
-    }
-});
+

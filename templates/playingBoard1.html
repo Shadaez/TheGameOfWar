@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8">
+  <!--<meta charset="utf-8">-->
   <title>The Game of War</title>
    
   <!-- CSS libraries -->
@@ -33,12 +33,13 @@
                 <input type="text" id="playerName" class="span2" name="playerName" value="" placeholder= "Enter Player Name" required>
                 <input type="button" id="create" value="Create Game" class="btn"/>
                 <br/>
-                <div class="btn-group btn-group-vertical" id="gameListJoin">
-                  <h5>Games to Join</h5>
-                </div>
                 <div class="btn-group btn-group-vertical" id="gameListInProgress">
                   <h5>Games in progress</h5>
                 </div>
+                <div class="btn-group btn-group-vertical" id="gameListJoin">
+                  <h5>Games to Join</h5>
+                </div>
+                
             </form>
           </div><!--/.well -->
           <div id='rules' class="well sidebar-nav">
@@ -60,32 +61,27 @@
           <div class="hero-unit" id="startGame">
             <form id="PlayFrm">
               <h1>Current Game : <span id="txtGame" class="label"></span></h1>
-              <h3>Number of Players :  <span id="nPlayers" class="label"></span> Number of Cards :  <span id="nCards" class="label"></span></h3>
+              <h5>Number of Players :  <span id="nPlayers" class="label"></span> Number of Cards in user stack:  <span id="nCards" class="label"></span></h5>
               <p>To start Game click <input type="button" id="deal" value="Deal Game" class="btn btn-primary btn-lg"></p>
               <p style="display:none">Submit the card <input type="button" id="choosen" value="Choose Card" class="btn btn-primary btn-lg"></p>
             </form>
           </div>
-          <div class="row-fluid" id="gameDetails">
-            <div class="span4">
-              <ul class="nav nav-list" id="playerList" name="players">
-              </ul>              
-            </div><!--/span-->
-            <div class="span4">
-              <h2>Chat Window</h2>
-            </div><!--/span-->
-            <div class="span4">
-              <h2>Nothing</h2>
-            </div><!--/span-->
-          </div><!--/row-->
           <div class="row-fluid" id="board">
             <div class="span4">
-              <div id="card1" data-index=0 class="card"></div>
+              <ul class="nav nav-list" id="playerList">
+              </ul>              
             </div><!--/span-->
-            <div class="span4">
-              <div id="card2" data-index=1 class="card"></div>
+            <div class="span8">
+              <div id="card-container">
+                  <div id="card1" data-index=0 class="card"></div>
+                  <div id="card2" data-index=1 class="card"></div>
+                  <div id="card3" data-index=2 class="card"></div>
+              </div>
             </div><!--/span-->
+          </div><!--/row-->
+          <div class="row-fluid" id="chat">
             <div class="span4">
-              <div id="card3" data-index=2 class="card"></div>
+              <h1>chat window</h1>
             </div><!--/span-->
           </div><!--/row-->
         </div><!--/span-->
