@@ -5,7 +5,7 @@ $(ready);
 
 function ready() { //start jQuery
     function intializePage(){
-        //hides all the elements.
+        //hides board elements initially
         $("#startGame,#chat,#board").hide();
     }
 
@@ -47,6 +47,22 @@ function ready() { //start jQuery
 
     $('.card').slideToggle();
 
+    $('#choosen').on('click', function() {
+        console.log('Submit button clicked');
+        if (UserCards.openToSubmit === true) {
+            var selection = $('.active-card').data('index');
+            var gameID = $('#txtGame').html();
+            var data = {
+                id: gameID,
+                card: Hand[selection],
+                cardsLeft: UserCards.length
+            };
+            console.log(data);
+            serverSocket.emit("submit-card", data);
+            UserCards.openToSubmit = false;
+        }
+    });
+
    
 } //end jquery
 
@@ -82,6 +98,15 @@ function display3Cards() {
     $("#nCards").html(UserCards.length);
 }
 
+function drawACard() {
+    UserCards.openToSubmit = true;
+    var selection = $('.active-card').data('index');
+    var newcard = UserCards.pop();
+    Hand[selection] = newcard;
+    $('.active-card').css('background-image', 'url(' + Hand[selection].url + ')')
+    $('.active-card').animate({'top': '+=50px'}, 500);
+    $('.active-card').removeClass('active-card');
+}
 
 serverSocket.on("updateGameList", function(gameList) {
     $('#gameListJoin').html('').append("<h5>Games to Join</h5>");
@@ -116,19 +141,9 @@ serverSocket.on("cardDecks", function(cards) {
     UserCards = cards;
     console.dir(UserCards);
     $("#nCards").html(UserCards.length);
-    //$(".card").slideToggle();
+    $(".card").slideToggle();
     display3Cards();
     $("#PlayFrm p").toggle();
-    // UserCards.openToSubmit = true;
-    // 
-    // //$('body').append('<div id="submit_card">Submit Card!</div>');
-
-    // $('#board').on('click', '.card', function() {
-    //     if (UserCards.openToSubmit === true) {
-    //         $('.active-card').removeClass('active-card');
-    //         $(this).addClass('active-card');
-    //     }
-    // });
 });
 
 serverSocket.on("winner", function(data) {
