@@ -42,34 +42,3 @@ body {
 .active-card {
 }
 
-.lastCard, .cardsLeft {
-	width: 2em;
-	padding-left:.5em
-}
-
-#playerList {
-	padding: 0;
-	border: 1px solid black;
-	border-radius: 5px;
-}
-
-.ready {
-	height: 1em;
-	width: 1.5em;
-}
-
-#playerList li{
-	display: block;
-	border-bottom: 1px solid black;
-	height: 1em;
-}
-
-.ready, .lastCard, .cardsLeft{
-	margin: 0 0 0 0;
-	height: 1em;
-	border-left: 1px solid black;
-	display: inline-block;
-	overflow: hidden;
-	text-align: center;
-}
-

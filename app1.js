@@ -67,6 +67,7 @@ ioServer.sockets.on("connection", function(clientSocket) {
           var game=Games.Find(data.gameID);
           clientSocket.emit("switchToGame",game);
           pushToGame(game, "updatePlayerList", game);
+          // call the deal event handler when user limit reached maximum
           if(game.Players.length>=Deck.Max){
             console.log("deal called when limit reached 6");
             dealEventHandler(game.id);
