@@ -99,7 +99,7 @@ ioServer.sockets.on("connection", function(clientSocket) {
       game.CardHolder.push({socketid: clientSocket.id, card: data.card});
       var numCards = game.CardHolder.length;
       var numplayers = game.Players.length;
-      pushToGame(game, "updatePlayerList", game)
+      //pushToGame(game, "updatePlayerList", game)
       if (numCards === numplayers) {
         var winningCard = Deck.Compare(game.CardHolder);
         var returnCardsWinner = _.pluck(game.CardHolder, 'card');
@@ -147,5 +147,6 @@ ioServer.sockets.on("connection", function(clientSocket) {
   
 });
 
-httpServer.listen(3000);
-console.log("Started The Game of War on port 3000");
+var port=process.env.PORT || 3000;
+httpServer.listen(port);
+console.log("Started The Game of War on port " + port);

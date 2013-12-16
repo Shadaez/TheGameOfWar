@@ -6,7 +6,7 @@ $(ready);
 function ready() { //start jQuery
     function intializePage(){
         //hides board elements initially
-        $("#startGame,#board").hide();
+        $("#startGame,#board,#chat").hide();
     }
 
     intializePage();
@@ -183,7 +183,7 @@ serverSocket.on("switchToGame", function(game) {
     $("#txtGame").html(game.id);
     $("#txtName").html($(playerName).val());
     updatePlayerNames(game);
-    $("#startGame,#board,#createJoinGame,#welcome").toggle();
+    $("#startGame,#board,#createJoinGame,#welcome,#chat").toggle();
 });
 
 serverSocket.on("cardDecks", function(cards) {
