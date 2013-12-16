@@ -147,5 +147,6 @@ ioServer.sockets.on("connection", function(clientSocket) {
   
 });
 
-httpServer.listen(3000);
-console.log("Started The Game of War on port 3000");
+var port=process.env.PORT || 3000;
+httpServer.listen(port);
+console.log("Started The Game of War on port " + port);
