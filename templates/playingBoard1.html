@@ -60,7 +60,7 @@
           </div>
           <div class="hero-unit" id="startGame">
             <form id="PlayFrm">
-              <h1>Current Game : <span id="txtGame" class="label"></span></h1>
+              <h1>Hello <span id="txtName" class="label"></span> Current Game : <span id="txtGame" class="label"></span></h1>
               <h5>Number of Players :  <span id="nPlayers" class="label"></span> Number of Cards in user stack:  <span id="nCards" class="label"></span></h5>
               <p>To start Game click <input type="button" id="deal" value="Deal Game" class="btn btn-primary btn-lg"></p>
               <p style="display:none">Submit the card <input type="button" id="choosen" value="Choose Card" class="btn btn-primary btn-lg"></p>
@@ -69,7 +69,13 @@
           <div class="row-fluid" id="board">
             <div class="span4">
               <ul class="nav nav-list" id="playerList">
-              </ul>              
+              </ul> 
+              <div id="chat">
+                <h1>chat window</h1>
+                <textarea id="txtChat" rows="10" cols="20" readonly></textarea><br/>
+                <input type="text" id="txtMessage" class="span2" value="" placeholder= "Enter text" required>
+                <input type="button" id="sendMessage" value="Send" class="btn"/>
+              </div>             
             </div><!--/span-->
             <div class="span8">
               <div id="card-container">
@@ -77,11 +83,6 @@
                   <div id="card2" data-index=1 class="card"></div>
                   <div id="card3" data-index=2 class="card"></div>
               </div>
-            </div><!--/span-->
-          </div><!--/row-->
-          <div class="row-fluid" id="chat">
-            <div class="span4">
-              <h1>chat window</h1>
             </div><!--/span-->
           </div><!--/row-->
         </div><!--/span-->

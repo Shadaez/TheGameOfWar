@@ -6,13 +6,14 @@ $(ready);
 function ready() { //start jQuery
     function intializePage(){
         //hides board elements initially
-        $("#startGame,#chat,#board").hide();
+        $("#startGame,#board").hide();
     }
 
     intializePage();
 
     $("#create").on("click", function(event) {
         var player = $("[name='playerName']").val();
+        $("#txtName").html(player);
         if (player.length > 0) {
             serverSocket.emit("create", {playerName: player});
         }else{
@@ -63,6 +64,17 @@ function ready() { //start jQuery
         }
     });
 
+    $('#sendMessage').on('click', function() {
+        var player = $("#txtName").html();
+        var gameID=$("#txtGame").html();
+        var msg=$("#txtMessage").val();
+        if (msg.length > 0) {
+            serverSocket.emit("sendMessage", {playerName: player,gameID:gameID,message:msg});
+        }else{
+            $("#txtMessage").focus();
+        }
+    });
+
    
 } //end jquery
 
@@ -70,6 +82,7 @@ function ready() { //start jQuery
 function joinEventHandler(){
     var id=$(this).val();
     var player = $("[name='playerName']").val();
+    $("#txtName").html(player);
     if (player.length > 0) {
         serverSocket.emit("join", {playerName: player,gameID: id});
     }else{
@@ -83,8 +96,20 @@ function updatePlayerNames(game) {
     $('#nPlayers').html(playerListLength);
     $('#playerList').append('<li class="nav-header">Players in Game</li>');
     for (var i = 0; i < playerListLength; i++) {
-       $('#playerList').append('<li></li>')
-        .find("li:last").text(game.Players[i].name);//so that the names are escaped
+       // $('#playerList').append('<li></li>')
+       //  .find("li:last").text(game.Players[i].name);//so that the names are escaped
+       var checked = ''
+        if(game.Players[i].ready){
+            checked = "checked = 'checked'"
+        }
+        $('#playerList').append('<li><div class="name"></div><input class="ready" type="checkbox" '+ checked +' disabled = "disabled" ></input><div class = "lastCard"></div><div class = "cardsLeft"></div></li>')
+        .find("li:last").find('.name').text(game.Players[i].name);
+        if(game.Players[i].lastCard){
+            $('#playerList').find("li:last").find('.lastCard').text(getCardShort(game.Players[i].lastCard));
+        }
+        if(game.Players[i].cardsLeft){
+            $('#playerList').find("li:last").find('.cardsLeft').text(game.Players[i].cardsLeft);
+        }
         
     }
 }
@@ -108,6 +133,31 @@ function drawACard() {
     $('.active-card').removeClass('active-card');
 }
 
+function getCardShort(card){
+    var suit = card.suit.toUpperCase().slice(0,1)
+    var name;
+    var symbols = {
+        H: "♥",
+        S: "♠",
+        C: "♣",
+        D: "♦"
+    }
+    if (card.value >= 9){ //if it's a face card
+        name = card.name.slice(0,1);
+    } else {
+        name = card.name;
+    }
+
+    return name + symbols[suit]
+}
+
+function gameOver(){
+    //move back to home page, or maybe simply refresh page?
+    //just refresh page for now
+    location.reload();
+}
+
+//************Handling Socket events*********************
 serverSocket.on("updateGameList", function(gameList) {
     $('#gameListJoin').html('').append("<h5>Games to Join</h5>");
     $('#gameListInProgress').html('').append("<h5>Games in progress</h5>");
@@ -130,11 +180,10 @@ serverSocket.on("updatePlayerList", function(game) {
 });
 
 serverSocket.on("switchToGame", function(game) {
-    console.log("switchToGame");
-    console.log(game);
     $("#txtGame").html(game.id);
+    $("#txtName").html($(playerName).val());
     updatePlayerNames(game);
-    $("#startGame,#chat,#board,#createJoinGame,#welcome").toggle();
+    $("#startGame,#board,#createJoinGame,#welcome").toggle();
 });
 
 serverSocket.on("cardDecks", function(cards) {
@@ -160,4 +209,19 @@ serverSocket.on("alertwinner", function(data) {
     //display3Cards(); //we need to only draw 1 more card and replace the .active-card div with it
 });
 
+//on disconnect remove player from game
+serverSocket.on("playerLeft", function(cont){
+    if(cont){
+        alert("A player has left. The game will continue without them.");
+    } else {
+        alert("A player has left. There are not enough players to continue. You win by default.");
+        gameOver();
+    }
+});
+
+serverSocket.on("addChat", function(data){
+    console.log(data);
+    var msg=$(txtChat).val() + data.playerName + ":" + data.message + "\n" ;
+    $(txtChat).val(msg);
+});
 

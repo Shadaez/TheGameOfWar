@@ -8,7 +8,7 @@ body {
 .hero-unit{
 	padding :10px;
 }
-#playerName{
+#playerName, #txtMessage{
 	width:60%;
 	margin-left:5px;
 	margin-top:7px;
@@ -21,6 +21,16 @@ body {
 	background-color: #428bca;
 	font-size:1em;
 	line-height:1em;
+}
+#txtName{
+	font-size:1em;
+	line-height:1em;
+	background-color: #eee;
+	color:#333;
+}
+
+#txtChat{
+	width:80%;
 }
 
 .card{
@@ -42,3 +52,30 @@ body {
 .active-card {
 }
 
+.lastCard, .cardsLeft {
+	width: 2em;
+	padding-left:.5em
+}
+.name {
+	width: 10em;
+}
+
+.ready {
+	height: 1em;
+	width: 1.5em;
+}
+
+#playerList li{
+	display: block;
+	border-bottom: 1px solid black;
+	height: 1em;
+}
+
+.ready, .name, .lastCard, .cardsLeft{
+	margin: 0 0 0 0;
+	height: 1em;
+	border-left: 1px solid black;
+	display: inline-block;
+	overflow: hidden;
+	text-align: center;
+}
