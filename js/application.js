@@ -1,4 +1,4 @@
-var serverSocket = io.connect("http://localhost");
+var serverSocket = io.connect("http://localhost:3000");//("vps.justinty.me:3002");
 var UserCards;
 var Hand = [];
 $(ready);
@@ -39,13 +39,13 @@ function ready() { //start jQuery
     //please leave this click handler set up this way for now
     $('body').on('click', '#submit_card', function() {
         //console.log('Submit button clicked');
-        if (UserCards.openToSubmit === true) {
+        if (UserCards.openToSubmit === true && $('.active-card').length >= 1) {
             var selection = $('.active-card').data('index');
             var gameID = $('#board').data('gameID');
             var data = {
                 id: gameID,
                 card: Hand[selection],
-                cardsLeft: UserCards.length
+                cardsLeft: UserCards.length + 2
             };
             $('.active-card').animate({'top': '-=5000px'}, 500, function(){
                 serverSocket.emit("submit-card", data);
@@ -68,6 +68,12 @@ function ready() { //start jQuery
             }
         }
     });
+    $(".chat").on("submit", function(e){
+        e.preventDefault();
+        message = $("[name='chat']").val();
+        $("[name='chat']").val('')
+        serverSocket.emit('chat', message);
+    })
     $('.card').slideToggle();
 } //end jquery
 
@@ -107,21 +113,17 @@ serverSocket.on("notEnoughPlayers", function(data) {
 
 
 serverSocket.on("winner", function(data) {
-    console.log("You are the winner!");
     var numCards = data.length;
     for (var i = 0; i < numCards; i++) {
-        UserCards.shift(data[i]);
+        UserCards.unshift(data[i]);
     }
 });
 
 serverSocket.on("alertwinner", function(data) {
-    alert("The winner is " + data); //lets highlight the player in list
-    drawACard();
-    //display3Cards(); //we need to only draw 1 more card and replace the .active-card div with it
+    drawACard()
 });
 
 serverSocket.on("switchToGame", function(game) {
-    console.log("switchToGame " + game);
     $("[name='txtName']").val($("[name='playerName']").val())
     $("[name='txtGame']").val(game.id);
     $('#playerList').html('');
@@ -146,14 +148,14 @@ serverSocket.on("cardDecks", function(cards) {
 
 
 //on disconnect remove player from game
-serverSocket.on("playerLeft", function(cont){
-    if(cont){
-        alert("A player has left. The game will continue without them.");
-    } else {
-        alert("A player has left. There are not enough players to continue. You win by default.");
-        gameOver();
-    }
+serverSocket.on("playerLeft", function(reason){
+    alert(reason);
 });
+
+serverSocket.on("gameOver", function(winner){
+    alert(winner.name + " won the game.")
+    gameOver();
+})
 
 //will update the player list to the player list in the passed in game
 function updatePlayerNames(game) {
@@ -164,13 +166,21 @@ function updatePlayerNames(game) {
         if(game.Players[i].ready){
             checked = "checked = 'checked'"
         }
-        $('#playerList').append('<li id="'+ game.Players[i].name +'"><input class="ready" type="checkbox" '+ checked +' disabled = "disabled" ></input><div class = "lastCard"></div><div class = "cardsLeft"></div><div class="name"></div><div class="message"></div></li>')
+        var winner = '';
+        if(game.Players[i].winner){
+            winner = "won";
+        }
+        $('#playerList').append('<li id="'+ game.Players[i].name +'"><input class="ready" type="checkbox" '+ checked +' disabled = "disabled" ></input><div class = "lastCard"></div><div class = "cardsLeft"></div><div class="name '+ winner +'"></div><div class="message"></div></li>')
         .find("li:last").find('.name').text(game.Players[i].name);
+        var $player = $('#playerList').find('#' + game.Players[i].name);
         if(game.Players[i].lastCard){
-            $('#playerList').find("li:last").find('.lastCard').text(getCardShort(game.Players[i].lastCard));
+            $player.find('.lastCard').text(getCardShort(game.Players[i].lastCard));
         }
         if(game.Players[i].cardsLeft){
-            $('#playerList').find("li:last").find('.cardsLeft').text(game.Players[i].cardsLeft);
+            $player.find('.cardsLeft').text(game.Players[i].cardsLeft);
+        }
+        if(game.Players[i].message){
+            $player.find('.message').text(game.Players[i].message);
         }
     }
 }
@@ -195,6 +205,11 @@ function display3Cards() {
 function drawACard() {
     UserCards.openToSubmit = true;
     var selection = $('.active-card').data('index');
+    if(Hand[0] === null && Hand[1] === null && Hand[2] === null){
+        serverSocket.emit('lose');
+        alert("You ran out of cards, you lost.")
+        gameOver();
+    }
     $('.active-card').animate({'top': '+=5050px'}, 500);
     if (UserCards.length >= 1){    
         var newcard = UserCards.pop();
@@ -244,5 +259,6 @@ function getCardShort(card){
 function gameOver(){
     //move back to home page, or maybe simply refresh page?
     //just refresh page for now
+    //alert server u lost?
     location.reload();
 }

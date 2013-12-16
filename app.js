@@ -94,7 +94,6 @@ ioServer.sockets.on("connection", function(clientSocket) {
     });
 
     clientSocket.on("submit-card", function(data) {
-      
       var game = Games.Find(data.id);
       var player = Games.FindPlayer(game, clientSocket.id);
       player.ready = true;
@@ -109,7 +108,7 @@ ioServer.sockets.on("connection", function(clientSocket) {
         //console.log(x);
         ioServer.sockets.socket(winningCard.socketid).emit('winner', returnCardsWinner);
         var winningplayer = _.findWhere(game.Players, {socket: winningCard.socketid});
-        winningplayer.cardsLeft += numplayers;
+        winningplayer.cardsLeft += returnCardsWinner.length;
         pushToGame(game, 'alertwinner', winningplayer.name);
         _.each(game.CardHolder, function(card){
             var player = Games.FindPlayer(game, card.socketid);
@@ -118,7 +117,9 @@ ioServer.sockets.on("connection", function(clientSocket) {
         game.CardHolder = [];
         _.each(game.Players, function(player){
             player.ready = false;
+            player.winner = false;
         });
+        winningplayer.winner = true;
         pushToGame(game, "updatePlayerList", game)
         //console.log('card holder --------');
         //console.log(game.CardHolder);
@@ -132,20 +133,34 @@ ioServer.sockets.on("connection", function(clientSocket) {
     clientSocket.on("disconnect", function(){
         //1 tell players in game someone left, update playerlist
         var game = Games.FindGameByPlayerSocket(clientSocket.id);
-        console.log(clientSocket.id);
         if(game){
-             Games.RemovePlayer(game, clientSocket.id);
+            var left = Games.FindPlayer(game, clientSocket.id);
+            var name = left.name;
+            Games.RemovePlayer(game, clientSocket.id);
             //2 check if game has enough players to continue
             if (game.Players.length > 1){
                 //continue with the game, the player who left's cards are just thrown out
-                pushToGame(game, "playerLeft", true);
+                pushToGame(game, "playerLeft", "Player " + name + " has left.");
                 pushToGame(game, "updatePlayerList", game);
-            } else {
+            } else if(game.Players.length >= 0){
                 //if not, alert remaining person that they won the game
-                pushToGame(game, "playerLeft", false);
-                gameOver(game);
+                pushToGame(game, "playerLeft", "Player " + name + " has left.");
+                gameOver(game, game.Players[0]);
+            } else {
+                 gameOver(game);
             }
         }
+    });
+    clientSocket.on('chat', function(message){
+        game = Games.FindGameByPlayerSocket(clientSocket.id);
+        player = Games.FindPlayer(game, clientSocket.id);
+        player.message = message;
+        pushToGame(game, "updatePlayerList", game);
+    });
+    clientSocket.on('lose', function(){
+        var loser = Games.FindPlayer(clientSocket.id);
+        var game = FindGameByPlayerSocket(clientSocket.id);
+        pushToGame(game, "playerLeft" , loser.name+" lost.")
     })
 });
 
@@ -159,8 +174,11 @@ function pushToGame(game, eventname, data){
     }
 }
 
-function gameOver(game){
+function gameOver(game, winner){
     var game = game;
+    if(winner){
+        pushToGame(game, "gameOver", winner)
+    }
     Games.GameOver(game);
     ioServer.sockets.emit("updateGameList", Games.All);
 }
